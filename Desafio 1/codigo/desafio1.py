@@ -55,20 +55,14 @@ def procesar_partidos(partidos):
 
 
 def ordenar_tabla(tabla):
-    return sorted(
-        tabla.items(),  # convierte el diccionario en lista de (equipo, estadísticas)
+    def clave_orden(item):
+        equipo, estadisticas = item
+        puntos = estadisticas["pts"]
+        diferencia = estadisticas["gf"] - estadisticas["gc"]
+        goles_favor = estadisticas["gf"]
+        return (-puntos, -diferencia, -goles_favor, equipo)
 
-        # lambda define cómo ordenar los equipos
-        key=lambda x: (
-            -x[1]["pts"],  # 1. mayor cantidad de puntos
-            
-            -(x[1]["gf"] - x[1]["gc"]),  # 2. diferencia de gol
-            
-            -x[1]["gf"],  # 3. goles a favor
-            
-            x[0]  # 4. nombre del equipo (orden alfabético)
-        )
-    )
+    return sorted(tabla.items(), key=clave_orden)
 
 
 def main():

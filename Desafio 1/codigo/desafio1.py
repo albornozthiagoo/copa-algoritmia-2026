@@ -11,7 +11,7 @@ def leer_partidos():
     partidos = []
 
     # Abre el archivo input.txt en modo lectura ("r" = read)
-    with open("input.txt", "r") as archivo:
+    with open("desafio 1/codigo/input.txt", "r") as archivo:
 
         # Lee la primera línea del archivo
         # int() convierte el texto a número

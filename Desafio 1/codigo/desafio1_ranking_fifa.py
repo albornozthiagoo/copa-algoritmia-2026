@@ -84,3 +84,29 @@ def procesar_partido(equipos, local, visitante, goles_local, goles_visitante):
         equipos[visitante]["puntos"] = equipos[visitante]["puntos"] + 1
         equipos[local]["pe"] = equipos[local]["pe"] + 1
         equipos[visitante]["pe"] = equipos[visitante]["pe"] + 1
+
+#
+
+def leer_partidos_desde_archivo(nombre_archivo):
+    equipos = {}
+
+    archivo = open(nombre_archivo, "r")
+
+    cantidad_partidos = int(archivo.readline())
+
+    for i in range(cantidad_partidos):
+        linea = archivo.readline()
+        datos = linea.split()
+
+        local = datos[0]
+        visitante = datos[1]
+        goles_local = int(datos[2])
+        goles_visitante = int(datos[3])
+
+        procesar_partido(equipos, local, visitante, goles_local, goles_visitante)
+
+    archivo.close()
+
+    return equipos
+
+

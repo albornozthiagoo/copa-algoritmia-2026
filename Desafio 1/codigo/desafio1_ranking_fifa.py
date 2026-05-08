@@ -129,9 +129,35 @@ def leer_partidos_desde_archivo(nombre_archivo):
 
     return equipos  # finalmente devolvemos equipos con todo los datos actualizados de los equipos que hayan en el archivo
 
+# creamos una funcion aparte para calcular la diferencia de gol
 
 def calcular_diferencia_gol(datos_equipo):
-    return datos_equipo["gf"] - datos_equipo["gc"]
+    # para saber la diferencia de gol de un equipo simplemente restamos sus goles a favor con sus goles en contra
+    return datos_equipo["gf"] - datos_equipo["gc"] 
+
+def obtener_ranking(equipos):
+    ranking = []
+
+    for nombre in equipos:
+        datos = equipos[nombre]
+
+        equipo_ranking = [
+            nombre,
+            datos["puntos"],
+            calcular_diferencia_gol(datos),
+            datos["gf"],
+            datos["gc"],
+            datos["pj"],
+            datos["pg"],
+            datos["pe"],
+            datos["pp"]
+        ]
+
+        ranking.append(equipo_ranking)
+
+    ranking.sort(key=lambda equipo: (-equipo[1], -equipo[2], -equipo[3], equipo[0]))
+
+    return ranking
 
 equipos = leer_partidos_desde_archivo("Desafio 1/codigo/partidos.txt")
 

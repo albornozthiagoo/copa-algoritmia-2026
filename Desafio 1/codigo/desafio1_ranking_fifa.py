@@ -24,7 +24,10 @@ def crear_equipo():
 
 # creamos otra funcion para preguntar si el equipo que se lee/detecta existe o no
 # en caso de que no existe lo creamos con su nombre y le ponemos su estructura reutilizando la funcion crea_equipo()
+# usamos un diccionario general llamado equipos para registrar los equipos nuevos con su estructura crar_equipo()
+
 
 def agregar_equipo_si_no_existe(equipos, nombre):
     if nombre not in equipos:
         equipos[nombre] = crear_equipo()
+

@@ -135,7 +135,10 @@ def calcular_diferencia_gol(datos_equipo):
     # para saber la diferencia de gol de un equipo simplemente restamos sus goles a favor con sus goles en contra
     return datos_equipo["gf"] - datos_equipo["gc"] 
 
+# creamos otra funcion donde aca se va ordenar la tabla/ranking de los equipos con sus estadisticas
 def obtener_ranking(equipos):
+
+    # creamos ahora una lista vacia llamada ranking
     ranking = []
 
     for nombre in equipos:

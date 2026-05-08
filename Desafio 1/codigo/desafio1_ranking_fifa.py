@@ -76,6 +76,9 @@ def procesar_partido(equipos, local, visitante, goles_local, goles_visitante):
         equipos[visitante]["pg"] = equipos[visitante]["pg"] + 1
         equipos[local]["pp"] = equipos[local]["pp"] + 1
 
+    # si el equipo lcoal y el visitante empatan sumamos 1 punto para ambos equipos 
+    # y actualizamos sumando +1 en el contador de partido empatado para ambos equipos
+
     else:
         equipos[local]["puntos"] = equipos[local]["puntos"] + 1
         equipos[visitante]["puntos"] = equipos[visitante]["puntos"] + 1

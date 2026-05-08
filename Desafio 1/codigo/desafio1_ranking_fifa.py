@@ -88,7 +88,9 @@ def procesar_partido(equipos, local, visitante, goles_local, goles_visitante):
 # creamos una funcion ahora para poder leer el archivo que va entrar
 
 def leer_partidos_desde_archivo(nombre_archivo):
-    equipos = {}  # aca creamos un diccionario vacio. este va ser nuestro diccionario general donde va estar todas las estadisiticas de los equipos del archivo
+    # aca creamos un diccionario vacio.
+    # este va ser nuestro diccionario general donde va estar todas las estadisiticas de los equipos del archivo registradas y actualizadas
+    equipos = {}   
 
     # el open (partidos.txt,r) es para abrir el archivo en modo lectura. 'r' viene read. leer.
 

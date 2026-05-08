@@ -32,11 +32,39 @@ def agregar_equipo_si_no_existe(equipos, nombre):
         equipos[nombre] = crear_equipo()
 
 
-# testeo temporal
-equipos = {}
 
-agregar_equipo_si_no_existe(equipos, "ARG")
-agregar_equipo_si_no_existe(equipos, "BRA")
-agregar_equipo_si_no_existe(equipos, "ARG")
+#creamos una funcion para procesar los partidos
 
-print(equipos)
+# primero recibimos datos como por ejemplo, procesar_partido(equipos, "ARG", "BRA", 2, 1)
+
+def procesar_partido(equipos, local, visitante, goles_local, goles_visitante):
+
+    # antes de procesar el partido nos aseguramos primero que los equipos existan y tengan su estructura
+    
+    agregar_equipo_si_no_existe(equipos, local)
+    agregar_equipo_si_no_existe(equipos, visitante)
+
+    equipos[local]["pj"] = equipos[local]["pj"] + 1
+    equipos[visitante]["pj"] = equipos[visitante]["pj"] + 1
+
+    equipos[local]["gf"] = equipos[local]["gf"] + goles_local
+    equipos[local]["gc"] = equipos[local]["gc"] + goles_visitante
+
+    equipos[visitante]["gf"] = equipos[visitante]["gf"] + goles_visitante
+    equipos[visitante]["gc"] = equipos[visitante]["gc"] + goles_local
+
+    if goles_local > goles_visitante:
+        equipos[local]["puntos"] = equipos[local]["puntos"] + 3
+        equipos[local]["pg"] = equipos[local]["pg"] + 1
+        equipos[visitante]["pp"] = equipos[visitante]["pp"] + 1
+
+    elif goles_local < goles_visitante:
+        equipos[visitante]["puntos"] = equipos[visitante]["puntos"] + 3
+        equipos[visitante]["pg"] = equipos[visitante]["pg"] + 1
+        equipos[local]["pp"] = equipos[local]["pp"] + 1
+
+    else:
+        equipos[local]["puntos"] = equipos[local]["puntos"] + 1
+        equipos[visitante]["puntos"] = equipos[visitante]["puntos"] + 1
+        equipos[local]["pe"] = equipos[local]["pe"] + 1
+        equipos[visitante]["pe"] = equipos[visitante]["pe"] + 1

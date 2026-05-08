@@ -85,25 +85,43 @@ def procesar_partido(equipos, local, visitante, goles_local, goles_visitante):
         equipos[local]["pe"] = equipos[local]["pe"] + 1
         equipos[visitante]["pe"] = equipos[visitante]["pe"] + 1
 
-#
+# creamos una funcion ahora para poder leer el archivo que va entrar
 
 def leer_partidos_desde_archivo(nombre_archivo):
     equipos = {}
 
-    archivo = open(nombre_archivo, "r")
+    # el open (partidos.txt,r) es para abrir el archivo en modo lectura. 'r' viene read. leer.
 
+    archivo = open(nombre_archivo, 'r')
+
+    # usamos readline() para que nos permita leer una linea del archivo y ya estar prepatados para leer la siguiente linea
+    # como la primera linea es la cantidad de paetidos jugados se va leer "6" y utilizamos int para tomarlo como un numero
     cantidad_partidos = int(archivo.readline())
 
+    # como sabemos la cantidad de partidos ahora utilizamos for para repetir la siguiente estructura 6 veces 
+    # repetimos 6 veces para poder procesar todos los partidos del archivo
     for i in range(cantidad_partidos):
+        # aca utilizamos readline() para que lea la siguiente linea del archivo (como ya leimos una linea antes esta seria la segunda linea)
         linea = archivo.readline()
+
+        # aca utilizamos split() para seprar el texto de la segunda linea del archivo y ordenarlas en espacios como una lista
+        # al transformar la segunda linea del archivo (que es donde se encuentra los datos un partido) en una lista podemos identificar cada espacio
         datos = linea.split()
 
+        # como split() nos trandormo la linea en una lista procedemos a relacionar los datos del partido respectivamente de su posicion de la lista
         local = datos[0]
         visitante = datos[1]
+
+        # para los goles de local y visitante usamos int para que los lea como numeros y no texto
+
         goles_local = int(datos[2])
         goles_visitante = int(datos[3])
 
+        # por ultimo utilizamos la funcion procesar_partio() para actualizar los datos de cada equipo que jugo el partido que se leyo en el archivo
+
         procesar_partido(equipos, local, visitante, goles_local, goles_visitante)
+
+        # repetimos gracias al for este proceso 6 veces para que se procese todos los datos de los equipos que jugaron que menciona el archivo
 
     archivo.close()
 

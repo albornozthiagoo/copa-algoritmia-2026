@@ -31,3 +31,12 @@ def agregar_equipo_si_no_existe(equipos, nombre):
     if nombre not in equipos:
         equipos[nombre] = crear_equipo()
 
+
+# testeo temporal
+equipos = {}
+
+agregar_equipo_si_no_existe(equipos, "ARG")
+agregar_equipo_si_no_existe(equipos, "BRA")
+agregar_equipo_si_no_existe(equipos, "ARG")
+
+print(equipos)

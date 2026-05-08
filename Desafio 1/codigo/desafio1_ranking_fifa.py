@@ -35,23 +35,30 @@ def agregar_equipo_si_no_existe(equipos, nombre):
 
 #creamos una funcion para procesar los partidos
 
-# primero recibimos datos como por ejemplo, procesar_partido(equipos, "ARG", "BRA", 2, 1)
+# aca recibimos datos como por ejemplo, procesar_partido(equipos, "ARG", "BRA", 2, 1) para actualizar la estructura de estadisticas de cada equipo 
 
 def procesar_partido(equipos, local, visitante, goles_local, goles_visitante):
 
-    # antes de procesar el partido nos aseguramos primero que los equipos existan y tengan su estructura
-    
+    # antes de procesar el partido nos aseguramos primero que los equipos existan y tengan su estructura de estadisticas
+
     agregar_equipo_si_no_existe(equipos, local)
     agregar_equipo_si_no_existe(equipos, visitante)
 
+    # sumamos partido jugado en +1 tanto para el quipo visitante como el equipo local
     equipos[local]["pj"] = equipos[local]["pj"] + 1
     equipos[visitante]["pj"] = equipos[visitante]["pj"] + 1
+
+    # calculamos los goles a favor y en contra del equipo local
 
     equipos[local]["gf"] = equipos[local]["gf"] + goles_local
     equipos[local]["gc"] = equipos[local]["gc"] + goles_visitante
 
+    # calculamos los goles a favor y en contra del equipo visitante
+
     equipos[visitante]["gf"] = equipos[visitante]["gf"] + goles_visitante
     equipos[visitante]["gc"] = equipos[visitante]["gc"] + goles_local
+
+    #
 
     if goles_local > goles_visitante:
         equipos[local]["puntos"] = equipos[local]["puntos"] + 3

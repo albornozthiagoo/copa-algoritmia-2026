@@ -123,9 +123,15 @@ def leer_partidos_desde_archivo(nombre_archivo):
 
         # repetimos gracias al for este proceso 6 veces para que se procese todos los datos de los equipos que jugaron que menciona el archivo
 
-    archivo.close() # cerramos el archivo
+    archivo.close() # cerramos el archivo 
 
-    return equipos
+    return equipos  # finalmente devolvemos equipos con todo los datos actualizados de los equipos que hayan en el archivo
+
+equipos = leer_partidos_desde_archivo('partidos.txt')
+
+print(equipos)
+
+
 
 
 

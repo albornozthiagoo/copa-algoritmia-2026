@@ -129,6 +129,10 @@ def leer_partidos_desde_archivo(nombre_archivo):
 
     return equipos  # finalmente devolvemos equipos con todo los datos actualizados de los equipos que hayan en el archivo
 
+
+def calcular_diferencia_gol(datos_equipo):
+    return datos_equipo["gf"] - datos_equipo["gc"]
+
 equipos = leer_partidos_desde_archivo("Desafio 1/codigo/partidos.txt")
 
 print(equipos)

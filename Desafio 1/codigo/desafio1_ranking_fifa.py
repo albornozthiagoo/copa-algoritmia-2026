@@ -138,10 +138,14 @@ def calcular_diferencia_gol(datos_equipo):
 # creamos otra funcion donde aca se va ordenar la tabla/ranking de los equipos con sus estadisticas
 def obtener_ranking(equipos):
 
-    # creamos ahora una lista vacia llamada ranking
+    # creamos ahora una lista vacia llamada ranking donde van a ir los equipos y su estadisticas mejor ordenadas horizontalmente
     ranking = []
 
+    # creamos un for para recorrer todos los nombres de los equipos 
+
     for nombre in equipos:
+
+        # por cada nombre de equipo que recorra le estamos pidiendo aca todos sus datos del equipo
         datos = equipos[nombre]
 
         equipo_ranking = [

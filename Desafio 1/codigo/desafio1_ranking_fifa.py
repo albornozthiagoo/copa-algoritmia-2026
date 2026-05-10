@@ -135,6 +135,17 @@ def calcular_diferencia_gol(datos_equipo):
     # para saber la diferencia de gol de un equipo simplemente restamos sus goles a favor con sus goles en contra
     return datos_equipo["gf"] - datos_equipo["gc"] 
 
+# creamos una funcion para establecer el orden de criterio para clasificar a los equipos
+def criterio_ordenamiento(equipo):
+    puntos = equipo[1]
+    diferencia_gol = equipo[2]
+    goles_favor = equipo[3]
+    nombre = equipo[0]
+
+    # devolvemos en orden los datos en negativo porque mas adelante vamos a usar la funcion sort()
+    # la funcion sort sirve para ordenar listas y en cuanto a los numeros lo hace de menor a mayor por eso utilizamos los puntos en negativo
+    return (-puntos, -diferencia_gol, -goles_favor, nombre)
+
 # creamos otra funcion donde aca se va ordenar la tabla/ranking de los equipos con sus estadisticas
 def obtener_ranking(equipos):
 
@@ -165,7 +176,11 @@ def obtener_ranking(equipos):
         # usamos la funcion append() para agregarla al final de la lista de ranking los datos de la lista equipo_ranking
         ranking.append(equipo_ranking)
 
-    ranking.sort(key=lambda equipo: (-equipo[1], -equipo[2], -equipo[3], equipo[0]))
+        # utilizamos la funcion sort() ahora para ordenar y clasificar los equipos 
+        # dentro de sort utilizamos una key con la funcion de criterio_ordenamiento para decirle que caada equipo que tenga el ranking lo ordene 
+        # teniendo en cuenta el orden la posicion que establecimos en la funcion criterio_ordenamiento
+
+    ranking.sort(key=criterio_ordenamiento)
 
     return ranking
 

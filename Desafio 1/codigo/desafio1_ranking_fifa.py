@@ -1,13 +1,16 @@
-# con esta funcion creamos un equipo nuevo con todos sus estadisticas en cero
-# cada vez que se detecte o lee un equipo nuevo va seguir esta misma estructura
+# DESAFÍO 1 - SISTEMA DE CLASIFICACIÓN FIFA
+# Copa de Algoritmia y Programación UADE 2026
 
-#puntos = puntos del equipo
-#pj = partidos jugados
-#pg = partidos ganados
-#pe = partidos empatados
-#pp = partidos perdidos
-#gf = goles a favor
-#gc = goles en contra
+# Con esta función creamos un equipo nuevo con todas sus estadísticas en cero.
+# Cada vez que se detecta un equipo nuevo, se le asigna esta misma estructura.
+
+# puntos = puntos del equipo
+# pj = partidos jugados
+# pg = partidos ganados
+# pe = partidos empatados
+# pp = partidos perdidos
+# gf = goles a favor
+# gc = goles en contra
 
 def crear_equipo():
     equipo = {
@@ -22,62 +25,86 @@ def crear_equipo():
 
     return equipo
 
-# creamos otra funcion para preguntar si el equipo que se lee/detecta existe o no
-# en caso de que no existe lo creamos con su nombre y le ponemos su estructura reutilizando la funcion crea_equipo()
-# usamos un diccionario general llamado equipos para registrar los equipos nuevos con su estructura crar_equipo()
 
+# Esta función verifica si un equipo ya existe dentro del diccionario general.
+# Si el equipo no existe, lo agrega usando la estructura creada por crear_equipo().
 
 def agregar_equipo_si_no_existe(equipos, nombre):
     if nombre not in equipos:
         equipos[nombre] = crear_equipo()
 
 
+# Esta función valida que los goles estén dentro del rango permitido por la consigna.
+# Los goles deben ser enteros entre 0 y 20.
 
-#creamos una funcion para procesar los partidos
+def goles_validos(goles):
+    return goles >= 0 and goles <= 20
 
-# aca recibimos datos como por ejemplo, procesar_partido(equipos, "ARG", "BRA", 2, 1) para actualizar la estructura de estadisticas de cada equipo 
+
+# Esta función valida que el grupo cumpla las condiciones principales:
+# - Debe haber exactamente 4 equipos.
+# - Cada equipo debe haber jugado exactamente 3 partidos.
+
+def grupo_valido(equipos):
+    if len(equipos) != 4:
+        print("Error: el grupo debe tener exactamente 4 equipos.")
+        return False
+
+    for nombre in equipos:
+        if equipos[nombre]["pj"] != 3:
+            print("Error: el equipo", nombre, "no tiene exactamente 3 partidos jugados.")
+            return False
+
+    return True
+
+
+# Esta función procesa un partido.
+# Recibe el diccionario de equipos, el equipo local, el visitante y los goles de cada uno.
+# Ejemplo: procesar_partido(equipos, "ARG", "BRA", 2, 1)
 
 def procesar_partido(equipos, local, visitante, goles_local, goles_visitante):
 
-    # antes de procesar el partido nos aseguramos primero que los equipos existan y tengan su estructura de estadisticas
+    # Antes de procesar el partido, nos aseguramos de que ambos equipos existan.
+    # Si alguno no existe, se crea automáticamente con sus estadísticas en cero.
 
     agregar_equipo_si_no_existe(equipos, local)
     agregar_equipo_si_no_existe(equipos, visitante)
 
-    # sumamos partido jugado en +1 tanto para el quipo visitante como el equipo local
+    # Sumamos 1 partido jugado tanto al equipo local como al visitante.
+
     equipos[local]["pj"] = equipos[local]["pj"] + 1
     equipos[visitante]["pj"] = equipos[visitante]["pj"] + 1
 
-    # calculamos los goles a favor y en contra del equipo local
+    # Actualizamos goles a favor y goles en contra del equipo local.
 
     equipos[local]["gf"] = equipos[local]["gf"] + goles_local
     equipos[local]["gc"] = equipos[local]["gc"] + goles_visitante
 
-    # calculamos los goles a favor y en contra del equipo visitante
+    # Actualizamos goles a favor y goles en contra del equipo visitante.
 
     equipos[visitante]["gf"] = equipos[visitante]["gf"] + goles_visitante
     equipos[visitante]["gc"] = equipos[visitante]["gc"] + goles_local
 
-    # preguntamos aca si los goles del equipo local es mayor a los goles del equipo visitante
-    # si se cumple sumamos +3 en puntos y +1 en partido ganado para el equipo local
-    # y como el equipo local gano sumamos +1 en el contador de partido perdido para el visitante
+    # Si los goles del local son mayores, gana el local.
+    # El local suma 3 puntos y 1 partido ganado.
+    # El visitante suma 1 partido perdido.
 
     if goles_local > goles_visitante:
         equipos[local]["puntos"] = equipos[local]["puntos"] + 3
         equipos[local]["pg"] = equipos[local]["pg"] + 1
         equipos[visitante]["pp"] = equipos[visitante]["pp"] + 1
 
-    # preguntamos aca si los goles del equipo local es menor a los goles del equipo visitante
-    # si se cumple sumamos +3 en puntos y +1 en partido ganado para el equipo visitante
-    # y como el equipo visitante gano sumamos +1 en el contador de partido perdido para el equipo local
+    # Si los goles del visitante son mayores, gana el visitante.
+    # El visitante suma 3 puntos y 1 partido ganado.
+    # El local suma 1 partido perdido.
 
     elif goles_local < goles_visitante:
         equipos[visitante]["puntos"] = equipos[visitante]["puntos"] + 3
         equipos[visitante]["pg"] = equipos[visitante]["pg"] + 1
         equipos[local]["pp"] = equipos[local]["pp"] + 1
 
-    # si el equipo lcoal y el visitante empatan sumamos 1 punto para ambos equipos 
-    # y actualizamos sumando +1 en el contador de partido empatado para ambos equipos
+    # Si los goles son iguales, el partido termina empatado.
+    # Ambos equipos suman 1 punto y 1 partido empatado.
 
     else:
         equipos[local]["puntos"] = equipos[local]["puntos"] + 1
@@ -85,81 +112,163 @@ def procesar_partido(equipos, local, visitante, goles_local, goles_visitante):
         equipos[local]["pe"] = equipos[local]["pe"] + 1
         equipos[visitante]["pe"] = equipos[visitante]["pe"] + 1
 
-# creamos una funcion ahora para poder leer el archivo que va entrar
+
+# Esta función lee el archivo de entrada y procesa todos los partidos.
+# El archivo debe tener una primera línea con la cantidad de partidos.
+# Luego, cada línea debe tener: EquipoLocal EquipoVisitante GolesLocal GolesVisitante.
 
 def leer_partidos_desde_archivo(nombre_archivo):
-    # aca creamos un diccionario vacio.
-    # este va ser nuestro diccionario general donde va estar todas las estadisiticas de los equipos del archivo registradas y actualizadas
-    equipos = {}   
 
-    # el open (partidos.txt,r) es para abrir el archivo en modo lectura. 'r' viene read. leer.
+    # Creamos el diccionario general donde se van a guardar todos los equipos.
+    # Cada equipo tendrá sus estadísticas actualizadas a medida que se procesen partidos.
 
-    archivo = open(nombre_archivo, 'r')
+    equipos = {}
 
-    # usamos readline() para que nos permita leer una linea del archivo y ya estar prepatados para leer la siguiente linea
-    # como la primera linea es la cantidad de paetidos jugados se va leer "6" y utilizamos int para tomarlo como un numero
+    # Abrimos el archivo en modo lectura.
+    # La letra "r" significa read, es decir, leer.
+
+    archivo = open(nombre_archivo, "r")
+
+    # Leemos la primera línea del archivo.
+    # Esa primera línea indica la cantidad de partidos.
+    # Usamos int() porque el archivo lee texto, pero nosotros necesitamos un número.
+
     cantidad_partidos = int(archivo.readline())
 
-    # como sabemos la cantidad de partidos ahora utilizamos for para repetir la siguiente estructura 6 veces 
-    # repetimos 6 veces para poder procesar todos los partidos del archivo
+    # Validamos que la cantidad de partidos sea exactamente 6,
+    # porque la consigna indica que cada grupo tiene 6 partidos.
+
+    if cantidad_partidos != 6:
+        print("Error: la cantidad de partidos debe ser 6.")
+        archivo.close()
+        return None
+
+    # Usamos for para repetir el proceso de lectura una vez por cada partido.
+    # Como cantidad_partidos vale 6, el bloque se repite 6 veces.
+
     for i in range(cantidad_partidos):
-        # aca utilizamos readline() para que lea la siguiente linea del archivo (como ya leimos una linea antes esta seria la segunda linea)
+
+        # Leemos la siguiente línea del archivo.
+        # Como la primera línea ya se leyó antes, ahora se leen los partidos.
+
         linea = archivo.readline()
 
-        # aca utilizamos split() para seprar el texto de la segunda linea del archivo y ordenarlas en espacios como una lista
-        # al transformar la segunda linea del archivo (que es donde se encuentra los datos un partido) en una lista podemos identificar cada espacio
+        # split() separa la línea por espacios y la transforma en una lista.
+        # Ejemplo: "ARG BRA 2 1" pasa a ser ["ARG", "BRA", "2", "1"].
+
         datos = linea.split()
 
-        # como split() nos trandormo la linea en una lista procedemos a relacionar los datos del partido respectivamente de su posicion de la lista
+        # Validamos que la línea tenga exactamente 4 datos.
+        # Debe tener: equipo local, equipo visitante, goles local y goles visitante.
+
+        if len(datos) != 4:
+            print("Error: formato incorrecto en la línea", i + 2)
+            archivo.close()
+            return None
+
+        # Guardamos los nombres de los equipos.
+        # datos[0] es el equipo local.
+        # datos[1] es el equipo visitante.
+
         local = datos[0]
         visitante = datos[1]
 
-        # para los goles de local y visitante usamos int para que los lea como numeros y no texto
+        # Validamos que un equipo no juegue contra sí mismo.
+
+        if local == visitante:
+            print("Error: un equipo no puede jugar contra sí mismo.")
+            archivo.close()
+            return None
+
+        # Validamos que los goles sean números enteros.
+        # isdigit() devuelve True si el texto contiene solamente números.
+
+        if not datos[2].isdigit() or not datos[3].isdigit():
+            print("Error: los goles deben ser números enteros.")
+            archivo.close()
+            return None
+
+        # Convertimos los goles a número entero para poder hacer cálculos.
 
         goles_local = int(datos[2])
         goles_visitante = int(datos[3])
 
-        # por ultimo utilizamos la funcion procesar_partio() para actualizar los datos de cada equipo que jugo el partido que se leyo en el archivo
+        # Validamos que los goles estén entre 0 y 20.
+
+        if not goles_validos(goles_local) or not goles_validos(goles_visitante):
+            print("Error: los goles deben estar entre 0 y 20.")
+            archivo.close()
+            return None
+
+        # Si todos los datos son válidos, procesamos el partido
+        # y actualizamos las estadísticas de ambos equipos.
 
         procesar_partido(equipos, local, visitante, goles_local, goles_visitante)
 
-        # repetimos gracias al for este proceso 6 veces para que se procese todos los datos de los equipos que jugaron que menciona el archivo
+    # Cerramos el archivo después de terminar la lectura.
 
-    archivo.close() # cerramos el archivo 
+    archivo.close()
 
-    return equipos  # finalmente devolvemos equipos con todo los datos actualizados de los equipos que hayan en el archivo
+    # Devolvemos el diccionario equipos con todos los datos actualizados.
 
-# creamos una funcion aparte para calcular la diferencia de gol
+    return equipos
+
+
+# Esta función calcula la diferencia de gol de un equipo.
+# La diferencia de gol se obtiene restando goles en contra a goles a favor.
 
 def calcular_diferencia_gol(datos_equipo):
-    # para saber la diferencia de gol de un equipo simplemente restamos sus goles a favor con sus goles en contra
-    return datos_equipo["gf"] - datos_equipo["gc"] 
+    return datos_equipo["gf"] - datos_equipo["gc"]
 
-# creamos una funcion para establecer el orden de criterio para clasificar a los equipos
+
+# Esta función establece el criterio de ordenamiento del ranking.
+# El orden de prioridad es:
+# 1. Mayor cantidad de puntos.
+# 2. Mayor diferencia de gol.
+# 3. Mayor cantidad de goles a favor.
+# 4. Orden alfabético en caso de empate absoluto.
+
 def criterio_ordenamiento(equipo):
     puntos = equipo[1]
     diferencia_gol = equipo[2]
     goles_favor = equipo[3]
     nombre = equipo[0]
 
-    # devolvemos en orden los datos en negativo porque mas adelante vamos a usar la funcion sort()
-    # la funcion sort sirve para ordenar listas y en cuanto a los numeros lo hace de menor a mayor por eso utilizamos los puntos en negativo
+    # Usamos los valores numéricos en negativo porque sort() ordena de menor a mayor.
+    # Al ponerlos en negativo, logramos que los mayores queden primero.
+    # El nombre queda sin negativo porque debe ordenarse alfabéticamente.
+
     return (-puntos, -diferencia_gol, -goles_favor, nombre)
 
-# creamos otra funcion donde aca se va ordenar la tabla/ranking de los equipos con sus estadisticas
+
+# Esta función arma y ordena el ranking final de los equipos.
+
 def obtener_ranking(equipos):
 
-    # creamos ahora una lista vacia llamada ranking donde van a ir los equipos y su estadisticas mejor ordenadas horizontalmente
+    # Creamos una lista vacía donde vamos a guardar cada equipo con sus datos principales.
+
     ranking = []
 
-    # creamos un for para recorrer todos los nombres de los equipos 
+    # Recorremos todos los equipos del diccionario.
 
     for nombre in equipos:
 
-        # por cada nombre de equipo que recorra le estamos pidiendo aca todos sus datos del equipo
+        # Obtenemos las estadísticas del equipo actual.
+
         datos = equipos[nombre]
 
-        # creamos una lista ahora con los datos mas impornates de cada equipo ordenados por posicion
+        # Creamos una lista con los datos importantes del equipo.
+        # Cada posición de esta lista representa una estadística:
+        # [0] nombre
+        # [1] puntos
+        # [2] diferencia de gol
+        # [3] goles a favor
+        # [4] goles en contra
+        # [5] partidos jugados
+        # [6] partidos ganados
+        # [7] partidos empatados
+        # [8] partidos perdidos
+
         equipo_ranking = [
             nombre,
             datos["puntos"],
@@ -172,37 +281,53 @@ def obtener_ranking(equipos):
             datos["pp"]
         ]
 
-        # finalmente al final de cada recorrido agregamos cada estadistica importante de equipo_ranking a la lista vacia ranking
-        # usamos la funcion append() para agregarla al final de la lista de ranking los datos de la lista equipo_ranking
+        # Agregamos el equipo a la lista ranking.
+
         ranking.append(equipo_ranking)
 
-        # utilizamos la funcion sort() ahora para ordenar y clasificar los equipos 
-        # dentro de sort utilizamos una key con la funcion de criterio_ordenamiento para decirle que caada equipo que tenga el ranking lo ordene 
-        # teniendo en cuenta el orden la posicion que establecimos en la funcion criterio_ordenamiento
+    # Ordenamos el ranking usando la función criterio_ordenamiento.
+    # Esta función indica qué datos se deben mirar y en qué orden.
 
     ranking.sort(key=criterio_ordenamiento)
 
-    # devolvemos finalemnte ranking 
+    # Devolvemos el ranking ya ordenado.
+
     return ranking
 
-# creamos otra funcion para hacer la ultima tarea que es ordenar la salida de los equipos del ranking y mostrar quien calisfico y quien no
+
+# Esta función muestra la salida final solicitada por la consigna.
+# Muestra el primer clasificado, el segundo clasificado y el tercer puesto.
 
 def mostrar_clasificados(ranking):
     print("Clasificados:")
-    # aca estamos diciendo que imprimamos la primera fila de la lista de ranking y su nombre
+
+    # ranking[0][0] significa:
+    # primera fila del ranking, nombre del equipo.
+
     print(ranking[0][0])
-    # aca estamos diciendo que imprimamos la segunda fila de la lista de ranking y su nombre
+
+    # ranking[1][0] significa:
+    # segunda fila del ranking, nombre del equipo.
+
     print(ranking[1][0])
+
     print("Tercero:")
-    # aca estamos diciendo que imprimamos la tercera fila de la lista de ranking y su nombre
+
+    # ranking[2][0] significa:
+    # tercera fila del ranking, nombre del equipo.
+
     print(ranking[2][0])
+
+
+# Programa principal.
+# Primero leemos los partidos desde el archivo.
+# Después validamos que el grupo tenga 4 equipos y que todos hayan jugado 3 partidos.
+# Si todo es correcto, se obtiene el ranking y se muestran los clasificados.
 
 equipos = leer_partidos_desde_archivo("Desafio 1/codigo/partidos.txt")
 
-ranking = obtener_ranking(equipos)
-
-mostrar_clasificados(ranking)
-
-
+if equipos is not None and grupo_valido(equipos):
+    ranking = obtener_ranking(equipos)
+    mostrar_clasificados(ranking)
 
 

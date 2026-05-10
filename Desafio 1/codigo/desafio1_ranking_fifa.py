@@ -199,10 +199,9 @@ def mostrar_clasificados(ranking):
 
 equipos = leer_partidos_desde_archivo("Desafio 1/codigo/partidos.txt")
 
-ranking=obtener_ranking(equipos)
+ranking = obtener_ranking(equipos)
 
-print(ranking)
-
+mostrar_clasificados(ranking)
 
 
 

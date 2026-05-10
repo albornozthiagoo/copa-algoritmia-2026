@@ -182,11 +182,26 @@ def obtener_ranking(equipos):
 
     ranking.sort(key=criterio_ordenamiento)
 
+    # devolvemos finalemnte ranking 
     return ranking
+
+# creamos otra funcion para hacer la ultima tarea que es ordenar la salida de los equipos del ranking y mostrar quien calisfico y quien no
+
+def mostrar_clasificados(ranking):
+    print("Clasificados:")
+    # aca estamos diciendo que imprimamos la primera fila de la lista de ranking y su nombre
+    print(ranking[0][0])
+    # aca estamos diciendo que imprimamos la segunda fila de la lista de ranking y su nombre
+    print(ranking[1][0])
+    print("Tercero:")
+    # aca estamos diciendo que imprimamos la tercera fila de la lista de ranking y su nombre
+    print(ranking[2][0])
 
 equipos = leer_partidos_desde_archivo("Desafio 1/codigo/partidos.txt")
 
-print(equipos)
+ranking=obtener_ranking(equipos)
+
+print(ranking)
 
 
 

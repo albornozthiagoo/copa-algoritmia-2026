@@ -148,6 +148,7 @@ def obtener_ranking(equipos):
         # por cada nombre de equipo que recorra le estamos pidiendo aca todos sus datos del equipo
         datos = equipos[nombre]
 
+        # creamos una lista ahora con los datos mas impornates de cada equipo ordenados por posicion
         equipo_ranking = [
             nombre,
             datos["puntos"],
@@ -160,6 +161,7 @@ def obtener_ranking(equipos):
             datos["pp"]
         ]
 
+        # finalmente al final de cada recorrido agregamos cada estadistica importante de equipo_ranking a la lista vacia ranking
         ranking.append(equipo_ranking)
 
     ranking.sort(key=lambda equipo: (-equipo[1], -equipo[2], -equipo[3], equipo[0]))

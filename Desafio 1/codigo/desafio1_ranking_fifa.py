@@ -162,6 +162,7 @@ def obtener_ranking(equipos):
         ]
 
         # finalmente al final de cada recorrido agregamos cada estadistica importante de equipo_ranking a la lista vacia ranking
+        # usamos la funcion append() para agregarla al final de la lista de ranking los datos de la lista equipo_ranking
         ranking.append(equipo_ranking)
 
     ranking.sort(key=lambda equipo: (-equipo[1], -equipo[2], -equipo[3], equipo[0]))

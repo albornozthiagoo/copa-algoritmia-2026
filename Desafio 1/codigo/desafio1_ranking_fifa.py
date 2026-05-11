@@ -262,11 +262,86 @@ def mostrar_clasificados(ranking):
     # aca estamos diciendo que imprimamos la tercera fila de la lista de ranking y su nombre
     print(ranking[2][0])
 
-equipos = leer_partidos_desde_archivo("Desafio 1/codigo/partidos.txt")
+def borrar_pantalla():
+    print("\n" * 50)
 
-# VALIDACION FINAL: si equipos no es None y el grupo es valido, recien ahi calculamos el ranking
-# esto evita que el programa intente ordenar datos cuando el archivo tiene algun error
+equipos = leer_partidos_desde_archivo("codigos/partidos.txt")
 
-if equipos is not None and grupo_valido(equipos):
-    ranking = obtener_ranking(equipos)
-    mostrar_clasificados(ranking)
+# inicializamos la variable menu_seleccion en -1 para poder entrar al while
+menu_seleccion = -1
+
+# mientras menu_seleccion sea distinto de 0 el menu va seguir ejecutandose
+while menu_seleccion != 0:
+
+    # mostramos el menu principal
+    print("\n========== MENU PRINCIPAL ==========")
+    print("1 - Modo de uso")
+    print("2 - Tabla de posiciones")
+    print("3 - Acerca de")
+    print("0 - Salir")
+
+    # pedimos al usuario que ingrese una opcion
+    # usamos int() para convertir el dato ingresado a numero
+    menu_seleccion = int(input("\nIngrese una opcion: "))
+
+    # si el usuario ingresa 1 mostramos la seccion modo de uso
+    if menu_seleccion == 1:
+        borrar_pantalla()
+        print("\n========== MODO DE USO ==========")
+
+        # mostramos los pasos necesarios para usar el programa
+        print("1. Crear un archivo llamado partidos.txt")
+        print("2. Colocar el archivo dentro de la carpeta codigos")
+        print("3. Ingresar los partidos siguiendo el formato:")
+        print("   EQUIPO_LOCAL EQUIPO_VISITANTE GOLES_LOCAL GOLES_VISITANTE")
+        print("4. Ejecutar el programa")
+        print("5. Seleccionar la opcion correspondiente en el menu")
+
+        # mostramos un ejemplo visual de como deberia verse el archivo txt
+        print("\nEjemplo de archivo:\n")
+
+        print("6")
+        print("ARG BRA 2 1")
+        print("BRA ESP 1 1")
+        print("ESP ARG 3 0")
+        print("ARG JPN 2 0")
+        print("BRA JPN 2 1")
+        print("ESP JPN 1 0")
+
+    # si el usuario ingresa 2 mostramos la tabla de posiciones
+    elif menu_seleccion == 2:
+        borrar_pantalla()
+        print("\nMostrando tabla de posiciones...\n")
+        # VALIDACION FINAL: si equipos no es None y el grupo es valido, recien ahi calculamos el ranking
+        # esto evita que el programa intente ordenar datos cuando el archivo tiene algun error
+
+        if equipos is not None and grupo_valido(equipos):
+            ranking = obtener_ranking(equipos)
+            mostrar_clasificados(ranking)
+            # si el usuario ingresa 3 mostramos informacion del proyecto
+    elif menu_seleccion == 3:
+        borrar_pantalla()
+        print("\n========== ACERCA DE ==========")
+
+        print("Proyecto realizado para la Copa de Algoritmia 2026.\n")
+
+        print("Integrantes del equipo:")
+        print("- Thiago Albornoz")
+        print("- Lucas Abad")
+        print("- Valentino Sarniguette")
+        print("- Gaston Trezeguet")
+        print("- Valentin Zaccari")
+        print("""        ___________\n       '._==_==_=_.'\n       .-\\:      /-.\n      |   \\     /   |\n       \\   \\   /   /\n        '.  \\ /  .'\n          '-._.-'\n            | |\n           _| |_\n          `-----'""")
+   
+    # si el usuario ingresa 0 finalizamos el programa
+    elif menu_seleccion == 0:
+        
+        print("\nSaliendo del programa...")
+
+    # si el usuario ingresa cualquier otro numero mostramos error
+    else:
+
+        print("\nLa opcion ingresada no existe.")
+
+
+

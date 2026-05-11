@@ -121,7 +121,14 @@ def leer_partidos_desde_archivo(nombre_archivo):
 
     # el open (partidos.txt,r) es para abrir el archivo en modo lectura. 'r' viene read. leer.
 
-    archivo = open(nombre_archivo, 'r')
+     try:
+        #asigna el archivo en solo lectura
+        archivo = open(nombre_archivo, 'r')
+
+    except FileNotFoundError:
+        #Si no encuentra el archivo da error
+        print("Error: no se encontró el archivo:", nombre_archivo)
+        return equipos
 
     # usamos readline() para que nos permita leer una linea del archivo y ya estar prepatados para leer la siguiente linea
     # como la primera linea es la cantidad de paetidos jugados se va leer "6" y utilizamos int para tomarlo como un numero

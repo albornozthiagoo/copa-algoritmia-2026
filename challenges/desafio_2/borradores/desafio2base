@@ -1,12 +1,49 @@
-# borrador del desafio 2, thiago
+# Prediccion de Penales - Copa UADE 2026
+# Desafio 2
 
-# funcion para contar las direcciones
+def contar_direcciones(secuencia):
+    contador_l = 0
+    contador_r = 0
+    contador_c = 0
 
-def contar_penales(secuencia):
+    for i in range(len(secuencia)):
+        if secuencia[i] == "L":
+            contador_l += 1
+        elif secuencia[i] == "R":
+            contador_r += 1
+        elif secuencia[i] == "C":
+            contador_c += 1
 
-    # diccionario para guardar cantidades
-    conteo = {
-        "L": 0,
-        "R": 0,
-        "C": 0
-    }
+    return contador_l, contador_r, contador_c
+
+def direccion_dominante(contador_l, contador_r, contador_c):
+    # Prioridad en empate: L > R > C
+    # Se chequea primero L, luego R, luego C
+    # asi si empatan L gana sobre R, y R gana sobre C
+
+    mejor_dir   = "L"
+    mejor_count = contador_l
+
+    if contador_r > mejor_count:
+        mejor_dir   = "R"
+        mejor_count = contador_r
+
+    if contador_c > mejor_count:
+        mejor_dir   = "C"
+        mejor_count = contador_c
+
+    return mejor_dir, mejor_count
+
+def main():
+    archivo = open("challenges\\desafio_2\\borradores\\penales.txt", "r")
+    secuencia = archivo.readline().strip()
+    archivo.close()
+
+    contador_l, contador_r, contador_c = contar_direcciones(secuencia)
+
+    direccion, cantidad = direccion_dominante(contador_l, contador_r, contador_c)
+
+    print(direccion)
+    print(cantidad)
+
+main()

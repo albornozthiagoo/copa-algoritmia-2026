@@ -1,13 +1,12 @@
 # borrador del desafio 2, thiago
-# funcion para leer la secuencia desde el archivo
 
-def leer_secuencia(penales_archivo):
+# funcion para contar las direcciones
 
-    archivo = open(penales_archivo, "r")
+def contar_penales(secuencia):
 
-    # leemos la unica linea del archivo
-    secuencia = archivo.readline().strip()
-
-    archivo.close()
-
-    return secuencia
+    # diccionario para guardar cantidades
+    conteo = {
+        "L": 0,
+        "R": 0,
+        "C": 0
+    }

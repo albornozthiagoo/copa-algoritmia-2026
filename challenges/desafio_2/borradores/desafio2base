@@ -1,0 +1,13 @@
+# borrador del desafio 2, thiago
+# funcion para leer la secuencia desde el archivo
+
+def leer_secuencia(penales_archivo):
+
+    archivo = open(penales_archivo, "r")
+
+    # leemos la unica linea del archivo
+    secuencia = archivo.readline().strip()
+
+    archivo.close()
+
+    return secuencia

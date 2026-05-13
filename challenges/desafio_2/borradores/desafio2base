@@ -1,6 +1,18 @@
 # Prediccion de Penales - Copa UADE 2026
 # Desafio 2
 
+def lee_archivo(nombre_archivo):
+    error=0
+    try:
+        archivo = open(nombre_archivo, "r")
+        datos_archivo = archivo.readline().strip()
+        archivo.close()
+        return datos_archivo,error
+    except FileNotFoundError:
+        error=1
+        print("No se encuentra el archivo: \nRecordá que debe ingresarse el archivo penales.txt")
+        return None,error
+
 def contar_direcciones(secuencia):
     contador_l = 0
     contador_r = 0
@@ -35,15 +47,14 @@ def direccion_dominante(contador_l, contador_r, contador_c):
     return mejor_dir, mejor_count
 
 def main():
-    archivo = open("challenges\\desafio_2\\borradores\\penales.txt", "r")
-    secuencia = archivo.readline().strip()
-    archivo.close()
+    archivo = "challenges\\desafio_2\\borradores\\penales.txt"
+    secuencia,error = lee_archivo(archivo)
+    if error != 1:
+        contador_l, contador_r, contador_c = contar_direcciones(secuencia)
+        direccion, cantidad = direccion_dominante(contador_l, contador_r, contador_c)
 
-    contador_l, contador_r, contador_c = contar_direcciones(secuencia)
+        print(direccion)
+        print(cantidad)
 
-    direccion, cantidad = direccion_dominante(contador_l, contador_r, contador_c)
-
-    print(direccion)
-    print(cantidad)
 
 main()

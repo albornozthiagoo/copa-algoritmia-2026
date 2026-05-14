@@ -1,15 +1,37 @@
 # Prediccion de Penales - Copa UADE 2026
 # Desafio 2
 
+
+
+# creamos una funcion para abrir el archivo y poder leerlo
 def lee_archivo(nombre_archivo):
+
+    # creamos una variable error como una bandera de referencia para saber si el codigo anduvo o no
+    # si error=0 significa que el archivo se abrio con exito
     error=0
+
+    # creamos un try except para que en caso de que haya un error con el archivo no se rompa el programa y devuelva except
     try:
+
+        # aca creamos una variale y le asignamos el archivo.txt. lo arbimos en modo lectura 'r' para poder leerlo
         archivo = open(nombre_archivo, "r")
+        # aca leemos la primera linea del archivo gracias al readline() y usamos strip() para salatarnos y evitarnos cualquier salto de espacios en la lectura
+        # guardamos lo leido en una variable finalmente
         datos_archivo = archivo.readline().strip()
+
+        # cerramos el archivo.txt
         archivo.close()
+
+        # devolvemos el valor de la variable donde recolectamos los datos leidos y tambien el valor de error de referencia
         return datos_archivo,error
+    
+    #cremos ahora el except que nos va ayudar a evitar que se rompa el programa en caso de error
     except FileNotFoundError:
+
+        # creamos la variable de referencia error=1 
+        # si error=1 significa que hubo un problema al abrir o leer el archivo.txt
         error=1
+        
         print("No se encuentra el archivo: \nRecordá que debe ingresarse el archivo penales.txt")
         return None,error
 

@@ -56,6 +56,7 @@ def contar_direcciones(secuencia):
     # creamos un for para leer todos los datos posicion por posicion y verificar cada direccion
     # gracias al range(len()) podemos repetir i 10 veces (del 0 al 9) en donde cada repeticion va tomar una posicion diferente por ende una direccion diferente
     for i in range(len(secuencia)):
+        # ahora verificamos que posicion toma i en cada repeticion y vamos sumanndo al contador de direccion correspondiete
         if secuencia[i] == "L":
             contador_l += 1
         elif secuencia[i] == "R":
@@ -63,7 +64,16 @@ def contar_direcciones(secuencia):
         elif secuencia[i] == "C":
             contador_c += 1
 
+    # finalmente devolvemos todos los valores de los contadores
     return contador_l, contador_r, contador_c
+
+
+
+"""
+BLOQUE 3
+
+"""
+
 
 def direccion_dominante(contador_l, contador_r, contador_c):
     # Prioridad en empate: L > R > C

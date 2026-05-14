@@ -74,7 +74,7 @@ BLOQUE 3
 
 """
 
-
+# creamos una funcion para saber cual es la direccion dominante
 def direccion_dominante(contador_l, contador_r, contador_c):
     # Prioridad en empate: L > R > C
     # Se chequea primero L, luego R, luego C

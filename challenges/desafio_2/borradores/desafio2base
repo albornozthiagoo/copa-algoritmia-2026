@@ -74,7 +74,7 @@ BLOQUE 3
 
 """
 
-# creamos una funcion para saber cual es la direccion dominante
+# creamos una funcion para saber cual es la direccion mas dominante de las tres
 def direccion_dominante(contador_l, contador_r, contador_c):
     # Prioridad en empate: L > R > C
     # Se chequea primero L, luego R, luego C
@@ -93,9 +93,22 @@ def direccion_dominante(contador_l, contador_r, contador_c):
 
     return mejor_dir, mejor_count
 
+"""
+BLOQUE 4
+
+"""
+
+# finalmente creamos una funcion main que va ser la funcion principal del programa
+# es la encargada de coordinar todas las demas funciones
+
 def main():
+
+    # asignamos a la variable archivo la ruta del archivo.txt
     archivo = "challenges\\desafio_2\\borradores\\penales.txt"
+    # creamos dos variables y le asignamos los valores de la funcion lee_archivo con el parametro archivo que creamos antes
     secuencia,error = lee_archivo(archivo)
+    # preguntamos si la variable error es distintio de 1 (pregunta si el codigo corrio bien)
+    # en caso de que se cumpla la condicion se realiza el conteo de direcciones y el calculo de la direccion dominante para imprimirlos posteriormente
     if error != 1:
         contador_l, contador_r, contador_c = contar_direcciones(secuencia)
         direccion, cantidad = direccion_dominante(contador_l, contador_r, contador_c)
@@ -103,5 +116,6 @@ def main():
         print(direccion)
         print(cantidad)
 
+# finalmente ejecutamos la funcion principal para correr todo el programa 
 
 main()

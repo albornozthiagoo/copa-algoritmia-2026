@@ -1,7 +1,10 @@
 # Prediccion de Penales - Copa UADE 2026
 # Desafio 2
 
+"""
+BLOQUE 1
 
+"""
 
 # creamos una funcion para abrir el archivo y poder leerlo
 def lee_archivo(nombre_archivo):
@@ -34,12 +37,24 @@ def lee_archivo(nombre_archivo):
         
         print("No se encuentra el archivo: \nRecordá que debe ingresarse el archivo penales.txt")
         return None,error
+    
+    
+"""
+BLOQUE 2
+
+"""
+
+# creamos una funcion ahora para realizar el conteo de cada direccion
+# el parametro secuencia va ser los datos leidos del archivo.txt
 
 def contar_direcciones(secuencia):
+    # creamos un contador para cada direccion
     contador_l = 0
     contador_r = 0
     contador_c = 0
 
+    # creamos un for para leer todos los datos posicion por posicion y verificar cada direccion
+    # gracias al range(len()) podemos repetir i 10 veces (del 0 al 9) en donde cada repeticion va tomar una posicion diferente por ende una direccion diferente
     for i in range(len(secuencia)):
         if secuencia[i] == "L":
             contador_l += 1

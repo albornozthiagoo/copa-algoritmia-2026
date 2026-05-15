@@ -116,6 +116,84 @@ def main():
         print(direccion)
         print(cantidad)
 
-# finalmente ejecutamos la funcion principal para correr todo el programa 
+# funcion para "limpiar" la pantalla
+def borrar_pantalla():
 
-main()
+    print("\n" * 50)
+
+
+"""
+BLOQUE 5
+
+"""
+
+# inicializamos menu_seleccion en -1 para entrar al while
+menu_seleccion = -1
+
+# mientras el usuario no ingrese 0 el menu seguira ejecutandose
+while menu_seleccion != 0:
+
+    print("\n========== MENU PRINCIPAL ==========")
+    print("1 - Modo de uso")
+    print("2 - Ejecutar prediccion")
+    print("3 - Acerca de")
+    print("0 - Salir")
+
+    # pedimos una opcion y la convertimos directamente a entero
+    menu_seleccion = int(input("\nIngrese una opcion: "))
+
+    if menu_seleccion == 1:
+
+        borrar_pantalla()
+
+        print("\n========== MODO DE USO ==========\n")
+
+        print("1. Crear un archivo llamado penales.txt")
+        print("2. Colocar el archivo en la misma carpeta del programa")
+        print("3. Ingresar una secuencia utilizando:")
+        print("   L = izquierda")
+        print("   R = derecha")
+        print("   C = centro")
+        print("4. Ejecutar la opcion 2 del menu")
+
+        print("\nEjemplo de archivo:\n")
+
+        print("LRRCLRRLLR")
+
+    elif menu_seleccion == 2:
+
+        borrar_pantalla()
+
+        print("\n========== RESULTADO ==========\n")
+
+        # ejecutamos el programa principal
+        main()
+
+    elif menu_seleccion == 3:
+
+        borrar_pantalla()
+
+        print("\n========== ACERCA DE ==========\n")
+
+        print("Proyecto realizado para la Copa de Algoritmia y Programacion UADE 2026.\n")
+
+        print("Integrantes del equipo:")
+        print("- Lucas Abad")
+        print("- Thiago Albornoz")
+        print("- Valentino Sarniguette")
+        print("- Gaston Trezeguet")
+        print("- Valentin Zaccari")
+        print("""        ___________\n       '._==_==_=_.'\n       .-\\:      /-.\n      |   \\     /   |\n       \\   \\   /   /\n        '.  \\ /  .'\n          '-._.-'\n            | |\n           _| |_\n          `-----'""")
+   
+
+    elif menu_seleccion == 0:
+
+        borrar_pantalla()
+
+        print("Saliendo del programa...")
+
+    else:
+
+        borrar_pantalla()
+
+        print("La opcion ingresada no existe. Por favor, ingresar una opcion valida.")

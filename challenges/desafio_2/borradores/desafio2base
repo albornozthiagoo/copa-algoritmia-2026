@@ -195,39 +195,43 @@ BLOQUE 4
 
 """
 
-# finalmente creamos una funcion main que va ser la funcion principal del programa
-# es la encargada de coordinar todas las demas funciones
+# creamos una funcion que se encarga de ejecutar la prediccion de penales
+# esta funcion coordina la lectura del archivo, la validacion de la secuencia,
+# el conteo de direcciones, el calculo de la direccion dominante y la salida final
 
-def main():
+def ejecutar_prediccion():
 
-    # asignamos a la variable archivo la ruta del archivo.txt
+    # asignamos a la variable archivo el nombre del archivo txt
+    # como usamos solo "penales.txt", el archivo debe estar en la misma carpeta que el programa
+    archivo = "penales.txt"
 
-    archivo = "challenges\\desafio_2\\borradores\\penales.txt"
+    # creamos dos variables y le asignamos los valores de la funcion lee_archivo
+    # secuencia guarda los datos leidos del archivo
+    # error sirve como bandera para saber si hubo un problema al leer el archivo
+    secuencia, error = lee_archivo(archivo)
 
-    # creamos dos variables y le asignamos los valores de la funcion lee_archivo con el parametro archivo que creamos antes
-
-    secuencia,error = lee_archivo(archivo)
-
-    # preguntamos si la variable error es distinto de 1
+    # preguntamos si la variable error es distinta de 1
     # si error es distinto de 1 significa que el archivo se leyo correctamente
-
     if error != 1:
 
         # validamos que la secuencia tenga datos correctos antes de contar las direcciones
-
         error_secuencia = validar_secuencia(secuencia)
 
         # si error_secuencia es distinto de 1, significa que la secuencia es valida
         # recien ahi hacemos el conteo y buscamos la direccion dominante
-
         if error_secuencia != 1:
             contador_l, contador_r, contador_c = contar_direcciones(secuencia)
             direccion, cantidad = direccion_dominante(contador_l, contador_r, contador_c)
 
+            # mostramos la salida final pedida por la consigna:
+            # primera linea: direccion dominante
+            # segunda linea: cantidad de apariciones
             print(direccion)
             print(cantidad)
 
+
 # funcion para "limpiar" la pantalla
+# imprime varios saltos de linea para que el menu se vea mas ordenado
 
 def borrar_pantalla():
 
@@ -239,83 +243,135 @@ BLOQUE 5
 
 """
 
-# inicializamos menu_seleccion en -1 para entrar al while
+# creamos una funcion para mostrar el menu principal
+# desde este menu el usuario puede ver el modo de uso,
+# ejecutar la prediccion, ver informacion del proyecto o salir
 
-menu_seleccion = -1
+def mostrar_menu():
 
-# mientras el usuario no ingrese 0 el menu seguira ejecutandose
+    # inicializamos menu_seleccion en -1 para poder entrar al while
+    # usamos -1 porque es distinto de 0, entonces el menu se ejecuta al menos una vez
 
-while menu_seleccion != 0:
+    menu_seleccion = -1
 
-    print("\n========== MENU PRINCIPAL ==========")
-    print("1 - Modo de uso")
-    print("2 - Ejecutar prediccion")
-    print("3 - Acerca de")
-    print("0 - Salir")
+    # mientras el usuario no ingrese 0, el menu seguira ejecutandose
+    # la opcion 0 se usa para salir del programa
 
-    # pedimos una opcion si se selecciona ingresa al menú, en cualquier otro caso volvemos a solicitar otra opción
+    while menu_seleccion != 0:
 
-    try:
-        menu_seleccion = int(input("\nIngrese una opcion: "))
+        # mostramos las opciones disponibles para el usuario
+
+        print("\n========== MENU PRINCIPAL ==========")
+        print("1 - Modo de uso")
+        print("2 - Ejecutar prediccion")
+        print("3 - Acerca de")
+        print("0 - Salir")
+
+        # pedimos al usuario que ingrese una opcion del menu
+        # usamos try/except porque int() puede fallar si el usuario escribe una letra,
+        # deja el campo vacio o ingresa cualquier dato que no pueda convertirse a numero
+
+        try:
+            menu_seleccion = int(input("\nIngrese una opcion: "))
+        
+        except ValueError:
+
+            # si el usuario no ingresa un numero valido, limpiamos la pantalla
+            # mostramos un mensaje de error y usamos continue para volver al inicio del while
+            # de esta forma evitamos que el programa se rompa o que siga evaluando opciones invalidas
+
+            borrar_pantalla()
+            print("La opcion ingresada no es valida. Debe ingresar un numero de las opciones del menu.")
+            continue
+        
+        # si el usuario ingresa 1, mostramos las instrucciones de uso del programa
+
+        if menu_seleccion == 1:
+
+            borrar_pantalla()
+
+            print("\n========== MODO DE USO ==========\n")
+
+            # explicamos como debe llamarse el archivo, donde debe ubicarse
+            # y que caracteres se pueden utilizar en la secuencia
+
+            print("1. Crear un archivo llamado penales.txt")
+            print("2. Colocar el archivo en la misma carpeta del programa")
+            print("3. Ingresar una secuencia utilizando:")
+            print("   L = izquierda")
+            print("   R = derecha")
+            print("   C = centro")
+            print("4. Ejecutar la opcion 2 del menu")
+
+            print("\nEjemplo de archivo:\n")
+
+            print("LRRCLRRLLR")
+
+        # si el usuario ingresa 2, ejecutamos la prediccion de penales
+
+        elif menu_seleccion == 2:
+
+            borrar_pantalla()
+
+            print("\n========== RESULTADO ==========\n")
+
+            # llamamos a ejecutar_prediccion(), que se encarga de leer el archivo,
+            # validar la secuencia, contar direcciones,
+            # calcular la direccion dominante e imprimir el resultado
+
+            ejecutar_prediccion()
+
+        # si el usuario ingresa 3, mostramos informacion general del proyecto
+
+        elif menu_seleccion == 3:
+
+            borrar_pantalla()
+
+            print("\n========== ACERCA DE ==========\n")
+
+            print("Proyecto realizado para la Copa de Algoritmia y Programacion UADE 2026.\n")
+
+            print("Integrantes del equipo:")
+            print("- Lucas Abad")
+            print("- Thiago Albornoz")
+            print("- Valentino Sarniguette")
+            print("- Gaston Trezeguet")
+            print("- Valentin Zaccari")
+
+            
+
+            print("""        ___________
+       '._==_==_=_.'
+       .-\\:      /-.
+      |   \\     /   |
+       \\   \\   /   /
+        '.  \\ /  .'
+          '-._.-'
+            | |
+           _| |_
+          `-----'""")
     
-    except ValueError:
-        borrar_pantalla()
-        print("La opcion ingresada no es valida. Debe ingresar un numero.")
-        menu_seleccion = -1
-    
-    if menu_seleccion == 1:
+        # si el usuario ingresa 0, se corta el ciclo porque menu_seleccion deja de ser distinto de 0
 
-        borrar_pantalla()
+        elif menu_seleccion == 0:
 
-        print("\n========== MODO DE USO ==========\n")
+            borrar_pantalla()
 
-        print("1. Crear un archivo llamado penales.txt")
-        print("2. Colocar el archivo en la misma carpeta del programa")
-        print("3. Ingresar una secuencia utilizando:")
-        print("   L = izquierda")
-        print("   R = derecha")
-        print("   C = centro")
-        print("4. Ejecutar la opcion 2 del menu")
+            print("Saliendo del programa...")
 
-        print("\nEjemplo de archivo:\n")
+        # si el usuario ingresa un numero que no corresponde a ninguna opcion,
+        # mostramos un mensaje de error y el while vuelve a mostrar el menu
+        
+        else:
 
-        print("LRRCLRRLLR")
+            borrar_pantalla()
 
-    elif menu_seleccion == 2:
+            print("La opcion ingresada no existe. Por favor, ingresar una opcion valida.")
 
-        borrar_pantalla()
 
-        print("\n========== RESULTADO ==========\n")
+# este bloque indica el punto de inicio del programa
+# si este archivo se ejecuta directamente, se llama a mostrar_menu()
+# esto deja el codigo mas ordenado y evita ejecutar el menu automaticamente si el archivo fuera importado desde otro programa
 
-        # ejecutamos el programa principal
-
-        main()
-
-    elif menu_seleccion == 3:
-
-        borrar_pantalla()
-
-        print("\n========== ACERCA DE ==========\n")
-
-        print("Proyecto realizado para la Copa de Algoritmia y Programacion UADE 2026.\n")
-
-        print("Integrantes del equipo:")
-        print("- Lucas Abad")
-        print("- Thiago Albornoz")
-        print("- Valentino Sarniguette")
-        print("- Gaston Trezeguet")
-        print("- Valentin Zaccari")
-        print("""        ___________\n       '._==_==_=_.'\n       .-\\:      /-.\n      |   \\     /   |\n       \\   \\   /   /\n        '.  \\ /  .'\n          '-._.-'\n            | |\n           _| |_\n          `-----'""")
-   
-
-    elif menu_seleccion == 0:
-
-        borrar_pantalla()
-
-        print("Saliendo del programa...")
-
-    else:
-
-        borrar_pantalla()
-
-        print("La opcion ingresada no existe. Por favor, ingresar una opcion valida.")
+if __name__ == "__main__":
+    mostrar_menu()

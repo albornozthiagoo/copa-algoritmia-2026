@@ -75,7 +75,7 @@ def validar_secuencia(secuencia):
     if secuencia == "":
 
         print("Error: el archivo se encuentra vacio")
-        print('si no sabe como hacerlo puede acceder al Modo de uso desde el menu')
+        print('si no sabe como llenarlo puede acceder al Modo de uso desde el menu')
 
         error = 1
 
@@ -114,7 +114,7 @@ def validar_secuencia(secuencia):
 
             print("Error: se detectaron caracteres fuera de lo permitido.")
 
-            print("La secuencia solo puede contener L, R y C. En mayusculas")
+            print("La secuencia solo puede contener L, R y C en mayusculas.")
 
             print("Verifique que no haya numeros, espacios, minusculas o letras invalidas.")
 

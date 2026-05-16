@@ -7,13 +7,16 @@ BLOQUE 1
 """
 
 # creamos una funcion para abrir el archivo y poder leerlo
+
 def lee_archivo(nombre_archivo):
 
     # creamos una variable error como una bandera de referencia para saber si el codigo anduvo o no
     # si error=0 significa que el archivo se abrio con exito
+
     error=0
 
     # creamos un try except para que en caso de que haya un error con el archivo no se rompa el programa y devuelva except
+
     try:
 
         # aca creamos una variale y le asignamos el archivo.txt. lo arbimos en modo lectura 'r' para poder leerlo
@@ -22,25 +25,31 @@ def lee_archivo(nombre_archivo):
         # leemos solamente la primera linea del archivo con readline()
         # si el archivo tiene mas lineas, no se toman en cuenta porque la consigna pide una sola secuencia
         # usamos strip() para eliminar el salto de linea final  
+
         datos_archivo = archivo.readline().strip()
         
         # Validamos que el archivo no este vacio
+
         if datos_archivo == "":
             print("El archivo se encuentra vacio, Si necesitas saber como completarlo")
             print("Usa la opci1ón 1 - Modo de uso")
             error = 2
         
         # cerramos el archivo.txt
+
         archivo.close()
 
         # devolvemos el valor de la variable donde recolectamos los datos leidos y tambien el valor de error de referencia
+
         return datos_archivo,error
     
     #cremos ahora el except que nos va ayudar a evitar que se rompa el programa en caso de error
+
     except FileNotFoundError:
 
         # creamos la variable de referencia error=1 
         # si error=1 significa que hubo un problema al abrir o leer el archivo.txt
+
         error=1
         
         print("No se encuentra el archivo: \nRecordá que debe ingresarse el archivo penales.txt")
@@ -91,6 +100,7 @@ def validar_secuencia(secuencia):
 
         # secuencia[i] representa el caracter actual que estamos revisando
         # con if estamos preguntando si el carcater que estamos verificando esta dentro de los caracter validos permitidos
+
         if secuencia[i] != "L" and secuencia[i] != "R" and secuencia[i] != "C":
 
             print("Error: se detectaron caracteres fuera de lo permitido.")
@@ -127,8 +137,11 @@ def contar_direcciones(secuencia):
 
     # creamos un for para leer todos los datos posicion por posicion y verificar cada direccion
     # gracias al range(len()) podemos repetir i 10 veces (del 0 al 9) en donde cada repeticion va tomar una posicion diferente por ende una direccion diferente
+
     for i in range(len(secuencia)):
+
         # ahora verificamos que posicion toma i en cada repeticion y vamos sumanndo al contador de direccion correspondiete
+
         if secuencia[i] == "L":
             contador_l += 1
         elif secuencia[i] == "R":
@@ -137,6 +150,7 @@ def contar_direcciones(secuencia):
             contador_c += 1
 
     # finalmente devolvemos todos los valores de los contadores
+
     return contador_l, contador_r, contador_c
 
 
@@ -147,7 +161,9 @@ BLOQUE 3
 """
 
 # creamos una funcion para saber cual es la direccion mas dominante de las tres
+
 def direccion_dominante(contador_l, contador_r, contador_c):
+
     # Prioridad en empate: L > R > C
     # Se chequea primero L, luego R, luego C
     # asi si empatan L gana sobre R, y R gana sobre C
@@ -176,20 +192,25 @@ BLOQUE 4
 def main():
 
     # asignamos a la variable archivo la ruta del archivo.txt
+
     archivo = "challenges\\desafio_2\\borradores\\penales.txt"
 
     # creamos dos variables y le asignamos los valores de la funcion lee_archivo con el parametro archivo que creamos antes
+
     secuencia,error = lee_archivo(archivo)
 
     # preguntamos si la variable error es distinto de 1
     # si error es distinto de 1 significa que el archivo se leyo correctamente
+
     if error != 1:
 
         # validamos que la secuencia tenga datos correctos antes de contar las direcciones
+
         error_secuencia = validar_secuencia(secuencia)
 
         # si error_secuencia es distinto de 1, significa que la secuencia es valida
         # recien ahi hacemos el conteo y buscamos la direccion dominante
+
         if error_secuencia != 1:
             contador_l, contador_r, contador_c = contar_direcciones(secuencia)
             direccion, cantidad = direccion_dominante(contador_l, contador_r, contador_c)
@@ -198,6 +219,7 @@ def main():
             print(cantidad)
 
 # funcion para "limpiar" la pantalla
+
 def borrar_pantalla():
 
     print("\n" * 50)
@@ -209,9 +231,11 @@ BLOQUE 5
 """
 
 # inicializamos menu_seleccion en -1 para entrar al while
+
 menu_seleccion = -1
 
 # mientras el usuario no ingrese 0 el menu seguira ejecutandose
+
 while menu_seleccion != 0:
 
     print("\n========== MENU PRINCIPAL ==========")
@@ -221,6 +245,7 @@ while menu_seleccion != 0:
     print("0 - Salir")
 
     # pedimos una opcion si se selecciona ingresa al menú, en cualquier otro caso volvemos a solicitar otra opción
+
     try:
         menu_seleccion = int(input("\nIngrese una opcion: "))
     
@@ -254,6 +279,7 @@ while menu_seleccion != 0:
         print("\n========== RESULTADO ==========\n")
 
         # ejecutamos el programa principal
+        
         main()
 
     elif menu_seleccion == 3:

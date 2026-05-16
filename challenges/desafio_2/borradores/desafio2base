@@ -171,16 +171,25 @@ def main():
 
     # asignamos a la variable archivo la ruta del archivo.txt
     archivo = "challenges\\desafio_2\\borradores\\penales.txt"
+
     # creamos dos variables y le asignamos los valores de la funcion lee_archivo con el parametro archivo que creamos antes
     secuencia,error = lee_archivo(archivo)
-    # preguntamos si la variable error es distintio de 1 (pregunta si el codigo corrio bien)
-    # en caso de que se cumpla la condicion se realiza el conteo de direcciones y el calculo de la direccion dominante para imprimirlos posteriormente
-    if error != 1:
-        contador_l, contador_r, contador_c = contar_direcciones(secuencia)
-        direccion, cantidad = direccion_dominante(contador_l, contador_r, contador_c)
 
-        print(direccion)
-        print(cantidad)
+    # preguntamos si la variable error es distinto de 1
+    # si error es distinto de 1 significa que el archivo se leyo correctamente
+    if error != 1:
+
+        # validamos que la secuencia tenga datos correctos antes de contar las direcciones
+        error_secuencia = validar_secuencia(secuencia)
+
+        # si error_secuencia es distinto de 1, significa que la secuencia es valida
+        # recien ahi hacemos el conteo y buscamos la direccion dominante
+        if error_secuencia != 1:
+            contador_l, contador_r, contador_c = contar_direcciones(secuencia)
+            direccion, cantidad = direccion_dominante(contador_l, contador_r, contador_c)
+
+            print(direccion)
+            print(cantidad)
 
 # funcion para "limpiar" la pantalla
 def borrar_pantalla():

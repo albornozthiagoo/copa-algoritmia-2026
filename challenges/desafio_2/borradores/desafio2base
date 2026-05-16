@@ -28,12 +28,6 @@ def lee_archivo(nombre_archivo):
 
         datos_archivo = archivo.readline().strip()
         
-        # Validamos que el archivo no este vacio
-
-        if datos_archivo == "":
-            print("El archivo se encuentra vacio, Si necesitas saber como completarlo")
-            print("Usa la opci1ón 1 - Modo de uso")
-            error = 2
         
         # cerramos el archivo.txt
 
@@ -80,7 +74,8 @@ def validar_secuencia(secuencia):
 
     if secuencia == "":
 
-        print("Error: la secuencia no puede estar vacia.")
+        print("Error: el archivo se encuentra vacio")
+        print('si no sabe como hacerlo puede acceder al Modo de uso desde el menu')
 
         error = 1
 

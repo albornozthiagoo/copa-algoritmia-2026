@@ -54,6 +54,7 @@ def lee_archivo(nombre_archivo):
 BLOQUE 1.1
 
 """   
+ 
 # creamos una funcion para validar que la secuencia leida desde el archivo sea correcta
 # el parametro secuencia va a ser el texto leido desde el archivo.txt
 # la funcion devuelve error=0 si la secuencia es valida
@@ -75,59 +76,60 @@ def validar_secuencia(secuencia):
     if secuencia == "":
 
         print("Error: el archivo se encuentra vacio")
-        print('si no sabe como llenarlo puede acceder al Modo de uso desde el menu')
+        print("Si no sabe como llenarlo puede acceder al Modo de uso desde el menu")
 
         error = 1
 
-        return error
-    
     # VALIDACION:
 
     # verificamos que la cantidad de penales este entre 1 y 1000
     # len(secuencia) cuenta cuantos caracteres tiene la secuencia
     # 1 y 1000 son valores validos, por eso el error es menor a 1 o mayor a 1000
 
-    if len(secuencia) < 1 or len(secuencia) > 1000:
+    elif len(secuencia) < 1 or len(secuencia) > 1000:
 
         print("Error: la secuencia debe tener entre 1 y 1000 penales.")
 
         error = 1
 
-        return error
+    else:
 
-    # VALIDACION:
+        # VALIDACION:
 
-    # verificamos que todos los caracteres de la secuencia sean validos
-    # la consigna solo permite las letras L, R y C
-    # si aparece un numero, espacio, simbolo, minuscula o una letra distinta, marcamos error
+        # verificamos que todos los caracteres de la secuencia sean validos
+        # la consigna solo permite las letras L, R y C
+        # si aparece un numero, espacio, simbolo, minuscula o una letra distinta, marcamos error
 
-    # con la funcion len() podemos leemos cada posicion de los caracteres del archivo.txt y nos ayuda para que range() sepa cuanto
-    # finalmente con for repetimos la posicion de i las veces que indique range() 
-    # i va adoptar diferentes valores de direccion dependiendo de la posicion que tenga prmitiendonos verificar cada caracter del archivo.txt
+        # usamos i como posicion inicial para recorrer la secuencia desde el primer caracter
+        i = 0
 
-    for i in range(len(secuencia)):
+        # recorremos la secuencia mientras no lleguemos al final
+        # y mientras no se haya detectado ningun error
+        # de esta forma, si aparece un caracter invalido, el while se corta
 
-        # secuencia[i] representa el caracter actual que estamos revisando
-        # con if estamos preguntando si el carcater que estamos verificando esta dentro de los caracter validos permitidos
+        while i < len(secuencia) and error == 0:
 
-        if secuencia[i] != "L" and secuencia[i] != "R" and secuencia[i] != "C":
+            # secuencia[i] representa el caracter actual que estamos revisando
+            # con if preguntamos si el caracter esta fuera de los valores permitidos
 
-            print("Error: se detectaron caracteres fuera de lo permitido.")
+            if secuencia[i] != "L" and secuencia[i] != "R" and secuencia[i] != "C":
 
-            print("La secuencia solo puede contener L, R y C en mayusculas.")
+                print("Error: se detectaron caracteres fuera de lo permitido.")
+                print("La secuencia solo puede contener L, R y C en mayusculas.")
+                print("Verifique que no haya numeros, espacios, minusculas o letras invalidas.")
+                print("Puede consultar el modo de uso desde el menu.")
 
-            print("Verifique que no haya numeros, espacios, minusculas o letras invalidas.")
+                error = 1
 
-            print("Puede consultar el modo de uso desde el menu.")
+            # avanzamos a la siguiente posicion de la secuencia
 
-            error = 1
+            i = i + 1
 
-            return error
-
-    # si no se encontro ningun problema, devolvemos error=0
+    # devolvemos una sola vez el valor de error al final de la funcion
+    # si error=0, la secuencia es valida
+    # si error=1, la secuencia tiene algun problema
 
     return error
-
 
 
 """

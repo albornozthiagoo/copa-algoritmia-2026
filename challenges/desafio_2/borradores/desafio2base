@@ -58,7 +58,7 @@ def validar_secuencia(secuencia):
 
     error = 0
 
-    # VALIDACION 1:
+    # VALIDACION:
 
     # verificamos que la secuencia no este vacia
     # esto puede pasar si el archivo txt no tiene nada escrito
@@ -71,7 +71,7 @@ def validar_secuencia(secuencia):
 
         return error
 
-    # VALIDACION 2 Y 3:
+    # VALIDACION:
 
     # verificamos que todos los caracteres de la secuencia sean validos
     # la consigna solo permite las letras L, R y C

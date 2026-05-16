@@ -349,7 +349,7 @@ def mostrar_menu():
           '-._.-'
             | |
            _| |_
-          `-----'""")
+          '-----'""")
     
         # si el usuario ingresa 0, se corta el ciclo porque menu_seleccion deja de ser distinto de 0
 
@@ -361,7 +361,7 @@ def mostrar_menu():
 
         # si el usuario ingresa un numero que no corresponde a ninguna opcion,
         # mostramos un mensaje de error y el while vuelve a mostrar el menu
-        
+
         else:
 
             borrar_pantalla()

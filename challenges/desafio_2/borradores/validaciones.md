@@ -5,5 +5,5 @@ VALIDACIONES PENDIENTES:
 - ~~En el caso que escriba letras que no sean L, C y R que las detecte y tire error~~
 - Que la cantidad de penales sean entre 1 y 1000 como pide el ejercicio, 1 y 1000 entran dentro de las posibilidades
 - Validar en caso que las letras sean en minuscula 
-- Validar en caso que el txt se encuentre vacio 
+- ~~Validar en caso que el txt se encuentre vacio~~ 
 - Validar en caso que haya saltos en las lineas o espacios entre medio, el texto tiene que estar todo junto

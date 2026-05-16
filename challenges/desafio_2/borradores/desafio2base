@@ -19,12 +19,12 @@ def lee_archivo(nombre_archivo):
 
     try:
 
-        # aca creamos una variale y le asignamos el archivo.txt. lo arbimos en modo lectura 'r' para poder leerlo
+        # aca creamos una variable y le asignamos el archivo.txt. lo abrimos en modo lectura 'r' para poder leerlo
         archivo = open(nombre_archivo, "r")
 
         # leemos solamente la primera linea del archivo con readline()
         # si el archivo tiene mas lineas, no se toman en cuenta porque la consigna pide una sola secuencia
-        # usamos strip() para eliminar el salto de linea final  
+        # usamos strip() para eliminar el salto de linea y los espacios del principio y el final si hay
 
         datos_archivo = archivo.readline().strip()
         
@@ -37,7 +37,7 @@ def lee_archivo(nombre_archivo):
 
         return datos_archivo,error
     
-    #cremos ahora el except que nos va ayudar a evitar que se rompa el programa en caso de error
+    # creamos ahora el except que nos va ayudar a evitar que se rompa el programa en caso de error
 
     except FileNotFoundError:
 
@@ -54,7 +54,7 @@ def lee_archivo(nombre_archivo):
 BLOQUE 1.1
 
 """   
- 
+
 # creamos una funcion para validar que la secuencia leida desde el archivo sea correcta
 # el parametro secuencia va a ser el texto leido desde el archivo.txt
 # la funcion devuelve error=0 si la secuencia es valida
@@ -151,7 +151,7 @@ def contar_direcciones(secuencia):
 
     for i in range(len(secuencia)):
 
-        # ahora verificamos que posicion toma i en cada repeticion y vamos sumanndo al contador de direccion correspondiete
+        # ahora verificamos que posicion toma i en cada repeticion y vamos sumando al contador de direccion correspondiente
 
         if secuencia[i] == "L":
             contador_l += 1

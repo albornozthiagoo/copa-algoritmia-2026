@@ -18,8 +18,10 @@ def lee_archivo(nombre_archivo):
 
         # aca creamos una variale y le asignamos el archivo.txt. lo arbimos en modo lectura 'r' para poder leerlo
         archivo = open(nombre_archivo, "r")
-        # aca leemos la primera linea del archivo gracias al readline() y usamos strip() para salatarnos y evitarnos cualquier salto de espacios en la lectura del archivo
-        # guardamos lo leido en una variable finalmente
+
+        # leemos solamente la primera linea del archivo con readline()
+        # si el archivo tiene mas lineas, no se toman en cuenta porque la consigna pide una sola secuencia
+        # usamos strip() para eliminar el salto de linea final  
         datos_archivo = archivo.readline().strip()
 
         # cerramos el archivo.txt

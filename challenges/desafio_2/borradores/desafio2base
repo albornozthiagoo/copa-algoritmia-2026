@@ -85,6 +85,20 @@ def validar_secuencia(secuencia):
         error = 1
 
         return error
+    
+    # VALIDACION:
+
+    # verificamos que la cantidad de penales este entre 1 y 1000
+    # len(secuencia) cuenta cuantos caracteres tiene la secuencia
+    # 1 y 1000 son valores validos, por eso el error es menor a 1 o mayor a 1000
+
+    if len(secuencia) < 1 or len(secuencia) > 1000:
+
+        print("Error: la secuencia debe tener entre 1 y 1000 penales.")
+
+        error = 1
+
+        return error
 
     # VALIDACION:
 
@@ -279,7 +293,7 @@ while menu_seleccion != 0:
         print("\n========== RESULTADO ==========\n")
 
         # ejecutamos el programa principal
-        
+
         main()
 
     elif menu_seleccion == 3:

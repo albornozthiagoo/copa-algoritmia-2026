@@ -39,8 +39,72 @@ def lee_archivo(nombre_archivo):
         
         print("No se encuentra el archivo: \nRecordá que debe ingresarse el archivo penales.txt")
         return None,error
-    
-    
+
+
+"""
+BLOQUE 1.1
+
+"""   
+# creamos una funcion para validar que la secuencia leida desde el archivo sea correcta
+# el parametro secuencia va a ser el texto leido desde el archivo.txt
+# la funcion devuelve error=0 si la secuencia es valida
+# y devuelve error=1 si encuentra algun problema
+
+def validar_secuencia(secuencia):
+
+    # creamos una variable error como bandera
+    # error=0 significa que la secuencia es valida
+    # error=1 significa que la secuencia tiene algun problema
+
+    error = 0
+
+    # VALIDACION 1:
+
+    # verificamos que la secuencia no este vacia
+    # esto puede pasar si el archivo txt no tiene nada escrito
+
+    if secuencia == "":
+
+        print("Error: la secuencia no puede estar vacia.")
+
+        error = 1
+
+        return error
+
+    # VALIDACION 2 Y 3:
+
+    # verificamos que todos los caracteres de la secuencia sean validos
+    # la consigna solo permite las letras L, R y C
+    # si aparece un numero, espacio, simbolo, minuscula o una letra distinta, marcamos error
+
+    # con la funcion len() podemos leemos cada posicion de los caracteres del archivo.txt y nos ayuda para que range() sepa cuanto
+    # finalmente con for repetimos la posicion de i las veces que indique range() 
+    # i va adoptar diferentes valores de direccion dependiendo de la posicion que tenga prmitiendonos verificar cada caracter del archivo.txt
+
+    for i in range(len(secuencia)):
+
+        # secuencia[i] representa el caracter actual que estamos revisando
+        # con if estamos preguntando si el carcater que estamos verificando esta dentro de los caracter validos permitidos
+        if secuencia[i] != "L" and secuencia[i] != "R" and secuencia[i] != "C":
+
+            print("Error: se detectaron caracteres fuera de lo permitido.")
+
+            print("La secuencia solo puede contener L, R y C.")
+
+            print("Verifique que no haya numeros, espacios o letras invalidas.")
+
+            print("Puede consultar el modo de uso desde el menu.")
+
+            error = 1
+
+            return error
+
+    # si no se encontro ningun problema, devolvemos error=0
+
+    return error
+
+
+
 """
 BLOQUE 2
 

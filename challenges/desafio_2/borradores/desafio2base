@@ -119,9 +119,9 @@ def validar_secuencia(secuencia):
 
             print("Error: se detectaron caracteres fuera de lo permitido.")
 
-            print("La secuencia solo puede contener L, R y C.")
+            print("La secuencia solo puede contener L, R y C. En mayusculas")
 
-            print("Verifique que no haya numeros, espacios o letras invalidas.")
+            print("Verifique que no haya numeros, espacios, minusculas o letras invalidas.")
 
             print("Puede consultar el modo de uso desde el menu.")
 

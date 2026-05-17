@@ -3,7 +3,7 @@
 
 """
 BLOQUE 1
-
+LECTURA Y APERTURA DEL ARCHIVO
 """
 
 # creamos una funcion para abrir el archivo y poder leerlo
@@ -11,7 +11,7 @@ BLOQUE 1
 def lee_archivo(nombre_archivo):
 
     # creamos una variable error como una bandera de referencia para saber si el codigo anduvo o no
-    # si error=0 significa que el archivo se abrio con exito
+    # si el valor de error=0 significa que el archivo se abrio con exito
 
     error=0
 
@@ -52,7 +52,7 @@ def lee_archivo(nombre_archivo):
 
 """
 BLOQUE 1.1
-
+VALIDACION DE LA SECUENCIA
 """   
 
 # creamos una funcion para validar que la secuencia leida desde el archivo sea correcta
@@ -134,7 +134,7 @@ def validar_secuencia(secuencia):
 
 """
 BLOQUE 2
-
+PROCESAMIENTO Y CONTEO DE DIRECCIONES
 """
 
 # creamos una funcion ahora para realizar el conteo de cada direccion
@@ -165,10 +165,9 @@ def contar_direcciones(secuencia):
     return contador_l, contador_r, contador_c
 
 
-
 """
 BLOQUE 3
-
+ANALISIS Y DETERMINACION DE RESULTADOS
 """
 
 # creamos una funcion para saber cual es la direccion mas dominante de las tres
@@ -194,7 +193,7 @@ def direccion_dominante(contador_l, contador_r, contador_c):
 
 """
 BLOQUE 4
-
+EJECUCION DE LA PREDICCION
 """
 
 # creamos una funcion que se encarga de ejecutar la prediccion de penales
@@ -242,7 +241,7 @@ def borrar_pantalla():
 
 """
 BLOQUE 5
-
+INTERFAZ DE USUARIO Y MENU PRINCIPAL
 """
 
 # creamos una funcion para mostrar el menu principal

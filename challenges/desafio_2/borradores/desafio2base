@@ -112,7 +112,7 @@ def validar_secuencia(secuencia):
             # secuencia[i] representa el caracter actual que estamos revisando
             # con if preguntamos si el caracter esta fuera de los valores permitidos
 
-            if secuencia[i] != "L" and secuencia[i] != "R" and secuencia[i] != "C":
+            if secuencia[i] not in "LRC":
 
                 print("Error: se detectaron caracteres fuera de lo permitido.")
                 print("La secuencia solo puede contener L, R y C en mayusculas.")

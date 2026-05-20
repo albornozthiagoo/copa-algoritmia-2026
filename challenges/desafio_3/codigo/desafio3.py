@@ -31,7 +31,9 @@ def crear_cancha():
 BLOQUE 2
 IMPRIMIR LA CANCHA
 """
-
+def imprimir_matriz(cancha_imprimir):
+    for fila in cancha_imprimir:
+        print(" ".join(str(posicion) for posicion in fila))
 """
 BLOQUE 3
 CREAR JUGADORES
@@ -40,4 +42,5 @@ CREAR JUGADORES
 """
 
 """
-
+matriz_cancha = crear_cancha()
+imprimir_matriz(matriz_cancha)

@@ -6,6 +6,11 @@ CREACION DE LA CANCHA
 FILAS = 100 
 COLUMNAS = 60
 
+# columna donde se encuentra cada arco
+# Esto despues lo vamos a usar para la tarea 6 para detectar el camino libre al ARCO 
+ARCO_ARGENTINA = 0
+ARCO_BRASIL    = 59
+
 # funcion encargada de crear una cancha vacia
 def crear_cancha():
 

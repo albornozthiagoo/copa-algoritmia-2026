@@ -42,11 +42,20 @@ def imprimir_matriz(cancha_imprimir):
         print(" ".join(str(posicion) for posicion in fila))
 """
 BLOQUE 3
-CREAR JUGADORES
+PROGRAMA PRINCIPAL DE PRUEBA
 """
 
-"""
+def main():
 
-"""
-matriz_cancha = crear_cancha()
-imprimir_matriz(matriz_cancha)
+    # creamos la matriz de la cancha
+    matriz_cancha = crear_cancha()
+
+    # mostramos un mensaje para confirmar que la cancha fue creada
+    print("Cancha creada correctamente.")
+
+    # imprimimos la cancha para verificar que todas las posiciones esten vacias
+    imprimir_matriz(matriz_cancha)
+
+
+if __name__ == "__main__":
+    main()

@@ -2,6 +2,9 @@
 BLOQUE 1
 CREACION DE LA CANCHA
 """
+# declaramos las constantes del largo y ancho de la cancha
+LARGO = 100 
+ANCHO = 60
 
 # funcion encargada de crear una cancha vacia
 def crear_cancha():
@@ -10,13 +13,13 @@ def crear_cancha():
     cancha = []
 
     # recorremos el largo de la cancha
-    for largo in range(100):
+    for largo in range(LARGO):
 
         # creamos una nueva franja de la cancha vacia
         franja_cesped = []
 
         # recorremos el ancho de la cancha
-        for ancho in range(60):
+        for ancho in range(ANCHO):
 
             # agregamos una posicion vacia simulada con un "."
             franja_cesped.append(".")

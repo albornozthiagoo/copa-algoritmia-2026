@@ -7,7 +7,7 @@ FILAS = 100
 COLUMNAS = 60
 
 # columna donde se encuentra cada arco
-# Esto despues lo vamos a usar para la tarea 6 para detectar el camino libre al ARCO 
+# Esto despues lo vamos a usar para la tarea 6 para detectar el camino libre al ARCO
 ARCO_ARGENTINA = 0
 ARCO_BRASIL    = 59
 
@@ -123,11 +123,11 @@ def posicionar_jugador(cancha, jugadores_argentina, jugadores_brasil, nombre, eq
 
 # ---- PRUEBA ----
 matriz_cancha = crear_cancha()
-imprimir_matriz(matriz_cancha)
 
 posicionar_jugador(matriz_cancha, jugadores_argentina, jugadores_brasil,
                    "Sebita", "A", 50, 10, "defensor", False)
 
+imprimir_matriz(matriz_cancha)
 # verificamos que la celda se actualizo en la matriz
 print("Celda (50, 10) en la matriz: " + matriz_cancha[50][10])
 

@@ -36,6 +36,9 @@ IMPRIMIR LA CANCHA
 """
 def imprimir_matriz(cancha_imprimir):
     for fila in cancha_imprimir:
+        # join une todos los elementos de la fila en un solo texto,
+        # separando cada posicion con un espacio
+        # de esta forma imprimimos una fila completa por cada print
         print(" ".join(str(posicion) for posicion in fila))
 """
 BLOQUE 3

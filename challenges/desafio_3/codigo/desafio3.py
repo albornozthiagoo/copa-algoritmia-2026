@@ -402,9 +402,164 @@ def calcular_distancias_a_pelota(jugadores_argentina, jugadores_brasil):
 
 
 
+
+
 """
 
 BLOQUE 9
+
+PASES POSIBLES - TAREA 5
+
+"""
+
+# funcion encargada de verificar si existe un pase posible entre dos jugadores
+
+def pase_posible(cancha, jugador_origen, jugador_destino):
+
+    posible = True
+
+    # validamos que los jugadores pertenezcan al mismo equipo
+
+    if jugador_origen["equipo"] != jugador_destino["equipo"]:
+
+        posible = False
+
+    # validamos que el pase sea en linea recta
+
+    # esto significa que deben estar en la misma fila o en la misma columna
+
+    elif jugador_origen["fila"] != jugador_destino["fila"] and jugador_origen["columna"] != jugador_destino["columna"]:
+
+        posible = False
+
+    else:
+
+        # si estan en la misma fila, analizamos las columnas que hay entre ambos jugadores
+
+        if jugador_origen["fila"] == jugador_destino["fila"]:
+
+            fila = jugador_origen["fila"]
+
+            # determinamos desde que columna hasta que columna hay que revisar
+
+            if jugador_origen["columna"] < jugador_destino["columna"]:
+
+                inicio = jugador_origen["columna"] + 1
+
+                fin = jugador_destino["columna"]
+
+            else:
+
+                inicio = jugador_destino["columna"] + 1
+
+                fin = jugador_origen["columna"]
+
+            # recorremos las celdas intermedias entre los dos jugadores
+
+            columna = inicio
+
+            while columna < fin and posible == True:
+
+                # un obstaculo bloquea el pase
+
+                if cancha[fila][columna] == "X":
+
+                    posible = False
+
+                # un rival bloquea el pase
+
+                elif cancha[fila][columna] != "." and cancha[fila][columna] != jugador_origen["equipo"]:
+
+                    posible = False
+
+                columna = columna + 1
+
+        # si estan en la misma columna, analizamos las filas que hay entre ambos jugadores
+
+        elif jugador_origen["columna"] == jugador_destino["columna"]:
+
+            columna = jugador_origen["columna"]
+
+            # determinamos desde que fila hasta que fila hay que revisar
+
+            if jugador_origen["fila"] < jugador_destino["fila"]:
+
+                inicio = jugador_origen["fila"] + 1
+
+                fin = jugador_destino["fila"]
+
+            else:
+
+                inicio = jugador_destino["fila"] + 1
+
+                fin = jugador_origen["fila"]
+
+            # recorremos las celdas intermedias entre los dos jugadores
+
+            fila = inicio
+
+            while fila < fin and posible == True:
+
+                # un obstaculo bloquea el pase
+
+                if cancha[fila][columna] == "X":
+
+                    posible = False
+
+                # un rival bloquea el pase
+
+                elif cancha[fila][columna] != "." and cancha[fila][columna] != jugador_origen["equipo"]:
+
+                    posible = False
+
+                fila = fila + 1
+
+    return posible
+
+# funcion encargada de listar todos los pases posibles para el jugador que tiene la pelota
+
+def listar_pases_posibles(cancha, jugadores_argentina, jugadores_brasil):
+
+    # buscamos al jugador que tiene la pelota
+
+    jugador_con_pelota = obtener_jugador_con_pelota(jugadores_argentina, jugadores_brasil)
+
+    if jugador_con_pelota == None:
+
+        print("Error: no hay ningun jugador con la pelota.")
+
+    else:
+
+        jugadores = obtener_todos_los_jugadores(jugadores_argentina, jugadores_brasil)
+
+        hay_pases = False
+
+        print("\nPases posibles para " + jugador_con_pelota["nombre"] + ":")
+
+        for jugador in jugadores:
+
+            # no tiene sentido analizar pase hacia si mismo
+
+            if jugador != jugador_con_pelota:
+
+                # solo analizamos compañeros del mismo equipo
+
+                if jugador["equipo"] == jugador_con_pelota["equipo"]:
+
+                    if pase_posible(cancha, jugador_con_pelota, jugador):
+
+                        print("- Pase posible a " + jugador["nombre"])
+
+                        hay_pases = True
+
+        if hay_pases == False:
+
+            print("No hay pases posibles disponibles.")
+
+
+"""
+
+BLOQUE 10
 
 PROGRAMA PRINCIPAL DE PRUEBA
 
@@ -465,6 +620,10 @@ def main():
     # calculamos las distancias de todos los jugadores a la pelota
 
     calcular_distancias_a_pelota(jugadores_argentina, jugadores_brasil)
+
+    # listamos los pases posibles para el jugador que tiene la pelota
+
+    listar_pases_posibles(matriz_cancha, jugadores_argentina, jugadores_brasil)
 
     # si quieren ver la cancha completa, descomentar esta linea
 

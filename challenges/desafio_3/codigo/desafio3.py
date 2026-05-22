@@ -92,20 +92,6 @@ def celda_ocupada(cancha, fila, columna):
 
     return ocupada
 
-#   ARRANCO TAREA 3 funcion encargada de calcular la nueva posicion segun la direccion
-def calcular_destino(fila, columna, direccion):
-
-    if direccion == "arriba":
-        return fila - 1, columna
-    if direccion == "abajo":
-        return fila + 1, columna
-    if direccion == "izquierda":
-        return fila, columna - 1
-    if direccion == "derecha":
-        return fila, columna + 1
-
-    return None, None
-
 """
 BLOQUE 4
 CREACION Y GESTION DE JUGADORES
@@ -179,6 +165,50 @@ def posicionar_jugador(cancha, jugadores_argentina, jugadores_brasil, nombre, eq
 
     print("Jugador " + nombre + " agregado correctamente en (" + str(fila) + ", " + str(columna) + ").")
 
+"""
+BLOQUE 6
+MOVER JUGADOR - TAREA 3
+"""
+
+# funcion que calcula la nueva posicion segun la direccion
+def calcular_destino(fila, columna, direccion):
+
+    if direccion == "arriba":
+        return fila - 1, columna
+
+    if direccion == "abajo":
+        return fila + 1, columna
+
+    if direccion == "izquierda":
+        return fila, columna - 1
+
+    if direccion == "derecha":
+        return fila, columna + 1
+
+    # si la direccion no existe devolvemos un valor vacio
+    return None, None
+
+
+# funcion encargada de mover un jugador en la cancha
+def mover_jugador(cancha, jugador, direccion):
+
+    # calculamos la nueva posicion segun la direccion elegida
+    nueva_fila, nueva_columna = calcular_destino(jugador["fila"], jugador["columna"], direccion)
+
+    # verifica si la direccion ingresada existe
+    if nueva_fila is None:
+
+        print("Movimiento invalido: direccion '" + direccion + "' no reconocida.")
+
+        return False
+    
+# verificamos que la nueva posicion este dentro de la cancha usanando la funcion de validacion cread antes
+    if not posicion_valida(nueva_fila, nueva_columna):
+
+        print("Movimiento invalido: no se puede salir de la cancha.")
+
+        return False
+    
 """
 BLOQUE 
 

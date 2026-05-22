@@ -97,20 +97,6 @@ BLOQUE 4
 CREACION Y GESTION DE JUGADORES
 """
 
-# funcion para crear el diccionario del jugador
-def crear_jugador(nombre,equipo,rol,fila,columna,tiene_pelota):
-
-    jugador = {
-
-        "nombre":nombre,
-        "equipo":equipo,
-        "fila":fila,
-        "columna":columna,
-        "rol":rol,
-        "tiene_pelota":tiene_pelota
-    }
-    return jugador
-
 # funcion encargada de verificar si alguien ya tiene la pelota
 def hay_pelota_en_juego(jugadores_argentina,jugadores_brasil):
 
@@ -159,15 +145,15 @@ def posicionar_jugador(cancha, jugadores_argentina, jugadores_brasil, nombre, eq
         print("Error: ya hay un jugador con la pelota en la cancha.")
         return
 
-    # creamos el jugador usando la funcion
-    jugador = crear_jugador(
-        nombre,
-        equipo,
-        rol,
-        fila,
-        columna,
-        tiene_pelota
-    )
+    # creamos el diccionario del jugador
+    jugador = {
+        "nombre":      nombre,
+        "equipo":      equipo,
+        "fila":        fila,
+        "columna":     columna,
+        "rol":         rol,
+        "tiene_pelota": tiene_pelota
+    }
 
     # lo agregamos a la lista correspondiente y actualizamos la matriz
     if equipo == "A":

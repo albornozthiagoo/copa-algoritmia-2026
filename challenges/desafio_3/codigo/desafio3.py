@@ -42,22 +42,6 @@ BLOQUE 3
 CREAR JUGADORES
 """
 
-# funcion encargada de crear un jugador usando diccionario
-def crear_jugador(nombre,equipo,rol,fila,columna,tiene_pelota):
-
-    jugador={
-
-        "nombre":nombre,
-        "equipo":equipo,
-        "rol":rol,
-        "fila":fila,
-        "columna":columna,
-        "pelota":tiene_pelota
-    }
-
-    # devolvemos el jugador creado
-    return jugador
-
 """
 
 """

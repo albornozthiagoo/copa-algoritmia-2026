@@ -200,7 +200,6 @@ def main():
     print("Jugadores de Argentina: " + str(jugadores_argentina))
 
 
-
 # este bloque indica el punto de inicio del programa
 
 # si este archivo se ejecuta directamente, se llama a main()

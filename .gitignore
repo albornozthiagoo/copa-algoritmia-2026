@@ -1,0 +1,5 @@
+# Ignorar archivos de Visual Studio Code
+*.code-workspace
+# archivos basura macOS
+.DS_Store
+**/.DS_Store

@@ -6,6 +6,10 @@ CREACION DE LA CANCHA
 FILAS = 100 
 COLUMNAS = 60
 
+# roles y equipos validos segun el PDF
+ROLES_VALIDOS  = ["arquero", "defensor", "mediocampista", "delantero"]
+EQUIPOS_VALIDOS = ["A", "B"]
+
 # funcion encargada de crear una cancha vacia
 def crear_cancha():
 
@@ -89,11 +93,96 @@ def celda_ocupada(cancha, fila, columna):
     return ocupada
 
 """
-
 BLOQUE 4
+CREACION Y GESTION DE JUGADORES
+"""
 
-PROGRAMA PRINCIPAL DE PRUEBA
+# funcion para crear el diccionario del jugador
+def crear_jugador(nombre,equipo,rol,fila,columna,tiene_pelota):
 
+    jugador = {
+
+        "nombre":nombre,
+        "equipo":equipo,
+        "fila":fila,
+        "columna":columna,
+        "rol":rol,
+        "tiene_pelota":tiene_pelota
+    }
+    return jugador
+
+# funcion encargada de verificar si alguien ya tiene la pelota
+def hay_pelota_en_juego(jugadores_argentina,jugadores_brasil):
+
+    # recorremos argentina
+    for jugador in jugadores_argentina:
+        if jugador["tiene_pelota"] == True:
+            return True
+
+
+    # recorremos brasil
+    for jugador in jugadores_brasil:
+        if jugador["tiene_pelota"] == True:
+            return True
+        
+    return False
+
+"""
+BLOQUE 5
+POSICIONAMIENTO DE JUGADORES
+"""
+
+def posicionar_jugador(cancha, jugadores_argentina, jugadores_brasil, nombre, equipo, fila, columna, rol, tiene_pelota):
+
+# validacion: equipo valido
+    if equipo not in EQUIPOS_VALIDOS:
+        print("Error: el equipo " + equipo + " no es valido. Use A o B.")
+        return
+
+    # validacion: rol valido
+    if rol not in ROLES_VALIDOS:
+        print("Error: el rol " + rol + " no es valido.")
+        return
+
+    # validacion: posicion dentro de la cancha
+    if fila < 0 or fila >= FILAS or columna < 0 or columna >= COLUMNAS:
+        print("Error: la posicion (" + str(fila) + ", " + str(columna) + ") esta fuera de la cancha.")
+        return
+
+    # validacion: celda ocupada
+    if cancha[fila][columna] != ".":
+        print("Error: la celda (" + str(fila) + ", " + str(columna) + ") ya esta ocupada.")
+        return
+
+    # validacion: solo un jugador puede tener la pelota
+    if tiene_pelota == True and hay_pelota_en_juego(jugadores_argentina, jugadores_brasil):
+        print("Error: ya hay un jugador con la pelota en la cancha.")
+        return
+
+    # creamos el jugador usando la funcion
+    jugador = crear_jugador(
+        nombre,
+        equipo,
+        rol,
+        fila,
+        columna,
+        tiene_pelota
+    )
+
+    # lo agregamos a la lista correspondiente y actualizamos la matriz
+    if equipo == "A":
+        jugadores_argentina.append(jugador)
+        cancha[fila][columna] = "A"
+    else:
+        jugadores_brasil.append(jugador)
+        cancha[fila][columna] = "B"
+
+    print("Jugador " + nombre + " agregado correctamente en (" + str(fila) + ", " + str(columna) + ").")
+
+"""
+BLOQUE 
+
+PROGRAMA PRINCIPAL
 """
 
 def main():

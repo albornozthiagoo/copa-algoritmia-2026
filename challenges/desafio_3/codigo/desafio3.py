@@ -177,13 +177,29 @@ def main():
 
     matriz_cancha = crear_cancha()
 
+    # creamos listas vacias para los jugadores de cada equipo
+
+    jugadores_argentina = []
+    jugadores_brasil = []
+
     # mostramos un mensaje para confirmar que la cancha fue creada
 
     print("Cancha creada correctamente.")
 
-    # imprimimos la cancha para verificar que todas las posiciones esten vacias
+    # posicionamos un jugador y verificamos que quede en la matriz y en la lista
+
+    posicionar_jugador(matriz_cancha, jugadores_argentina, jugadores_brasil,
+                       "Otamendi", "A", 50, 10, "defensor", False)
 
     imprimir_matriz(matriz_cancha)
+
+    # verificamos que la celda se actualizo en la matriz
+    print("Celda (50, 10) en la matriz: " + matriz_cancha[50][10])
+
+    # verificamos que el jugador quedo guardado en la lista
+    print("Jugadores de Argentina: " + str(jugadores_argentina))
+
+
 
 # este bloque indica el punto de inicio del programa
 

@@ -92,6 +92,20 @@ def celda_ocupada(cancha, fila, columna):
 
     return ocupada
 
+#   ARRANCO TAREA 3 funcion encargada de calcular la nueva posicion segun la direccion
+def calcular_destino(fila, columna, direccion):
+
+    if direccion == "arriba":
+        return fila - 1, columna
+    if direccion == "abajo":
+        return fila + 1, columna
+    if direccion == "izquierda":
+        return fila, columna - 1
+    if direccion == "derecha":
+        return fila, columna + 1
+
+    return None, None
+
 """
 BLOQUE 4
 CREACION Y GESTION DE JUGADORES

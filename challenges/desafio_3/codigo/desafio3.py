@@ -36,6 +36,35 @@ def crear_cancha():
     # devolvemos la cancha ya creada
     return cancha
 
+"""
+CREACION DE JUGADOR
+Ingreso: Datos del jugador
+Devuelve: Jugador creado para agregar al diccionario
+"""
+def crear_jugador(nombre, equipo, fila, columna, rol, tiene_pelota):
+    return {
+        "nombre": nombre,
+        "equipo": equipo,
+        "fila": fila,
+        "columna": columna,
+        "rol": rol,
+        "tiene_pelota": tiene_pelota
+    }
+
+"""
+CREA LOS JUGADORES
+Recibe: El diccionario de jugadores y dato del jugador
+Devuelve: El diccionario actualizado
+"""
+def agregar_jugador(jugadores_total, nombre, equipo, fila, columna, rol, tiene_pelota):
+    if len(jugadores_total) == 0:
+        id_jugador = 1
+    else:
+        id_jugador = max(jugadores_total) + 1
+
+    jugadores_total[id_jugador] = crear_jugador(nombre, equipo, fila, columna, rol, tiene_pelota)
+    return jugadores_total
+
 
 """
 BLOQUE 2

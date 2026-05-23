@@ -2,31 +2,18 @@
 BLOQUE 1
 CREACION DE LA CANCHA
 """
-
-
-
-# funcion encargada de crear una cancha vacia
+"""
+CREA LA CANCHA
+RECIBE EL ANCHO Y EL LARGO
+DEVUELVE LA MATRIZ CREADA
+"""
 def crear_cancha(ancho, largo):
-
-    # creamos una lista vacia donde vamos a guardar toda la cancha
     cancha = []
-
-    # recorremos las filas de la cancha
     for fila in range(ancho):
-
-        # creamos una nueva fila vacia
         fila_cancha = []
-
-        # recorremos las columnas de la cancha
         for columna in range(largo):
-
-            # agregamos una posicion vacia simulada con un "."
             fila_cancha.append(".")
-
-        # cuando la fila esta completa la agregamos a la cancha
         cancha.append(fila_cancha)
-
-    # devolvemos la cancha ya creada
     return cancha
 
 """
@@ -58,21 +45,13 @@ def agregar_jugador(jugadores_total, nombre, equipo, fila, columna, rol, tiene_p
     jugadores_total[id_jugador] = crear_jugador(nombre, equipo, fila, columna, rol, tiene_pelota)
     return jugadores_total
 
-
 """
-BLOQUE 2
-IMPRIMIR LA CANCHA
+IMPRIME LA CANCHA
+INGRESA LA MATRIZ
+NO DEVUELVE VALOR
 """
-
-# funcion encargada de imprimir la matriz de la cancha
 def imprimir_matriz(cancha_imprimir):
-
-    # recorremos cada fila de la cancha
     for fila in cancha_imprimir:
-
-        # join une todos los elementos de la fila en un solo texto,
-        # separando cada posicion con un espacio
-        # de esta forma imprimimos una fila completa por cada print
         print(" ".join(fila))
 
 
@@ -139,6 +118,55 @@ def celda_ocupada(cancha, fila, columna):
 BLOQUE 4
 CREACION Y GESTION DE JUGADORES
 """
+def opcion_crear_jugador(anexo_jugadores, equipos, filas_validas, columnas_validas, roles, cancha_jugador):
+    valor_valido = False
+    celda = True
+    temp_nombre = input("Ingresar Nombre del jugador (NO para cancelar): ")
+    while temp_nombre != "NO":
+        # posicionamos jugadores de prueba
+        temp_equipo = input("Ingresar el equipo del jugador: " )
+        while not equipo_valido(temp_equipo, equipos):
+            print("Error: el equipo " + temp_equipo + " no es valido. Use A o B.")
+            temp_equipo = input("Ingresar el equipo del jugador: " )
+        while celda == True:
+            while valor_valido == False:
+                try:
+                    temp_fila= int(input("Ingresar la fila donde se ubica el jugador: "))
+                    while not posicion_valida(temp_fila, filas_validas):
+                        print("Error: la fila (" + str(temp_fila) + ") esta fuera de la cancha.")
+                        temp_fila= int(input("Ingresar la fila donde se ubica el jugador: "))
+                    valor_valido = True
+                except ValueError:
+                    print("La opcion ingresada no es valida. Debe ingresar un numero.")
+            valor_valido = False
+            while valor_valido == False:
+                try:
+                    temp_columna= int(input("Ingresar la columna donde se ubica el jugador: "))
+                    while not posicion_valida(temp_columna, columnas_validas):
+                        print("Error: la columna (", str(temp_columna), ") esta fuera de la cancha.")
+                        temp_columna= int(input("Ingresar la columna donde se ubica el jugador: "))
+                    valor_valido = True
+                except ValueError:
+                    print("La opcion ingresada no es valida. Debe ingresar un numero.")
+            valor_valido = False
+            celda = celda_ocupada(cancha_jugador, temp_fila, temp_columna)
+        temp_rol = input("Ingresar el rol jugador: " )
+        while not rol_valido(temp_rol, roles):
+            print("Error: el rol " + temp_rol + " no es valido.")
+            temp_rol = input("Ingresar el rol jugador: " )
+            
+        if obtener_jugador_con_pelota(anexo_jugadores) != None:
+            temp_pelota = "N"
+            print("El jugador no tiene pelota porque ya hay una en juego")
+        else:
+            temp_pelota = input("El jugador tiene la pelota? (S/N): " )
+            while not pelota_validar(temp_pelota):
+                print("Error: el valor no es valido.")
+                temp_pelota = input("El jugador tiene la pelota? (S/N): " )
+        anexo_jugadores, cancha_jugador = posicionar_jugador(cancha_jugador, anexo_jugadores, temp_nombre, temp_equipo, temp_fila, temp_columna, temp_rol, temp_pelota)
+        celda = True
+        temp_nombre = input("Ingresar Nombre del jugador (NO para cancelar): ")
+    return anexo_jugadores,cancha_jugador
 
 """
 BLOQUE 5
@@ -156,19 +184,54 @@ def posicionar_jugador(cancha,jugadores_posicionar, nombre, equipo, fila, column
     jugadores_posicionar[id_jugador] = crear_jugador(nombre, equipo, fila, columna, rol, tiene_pelota)
     agregado = True
     cancha [fila][columna] = equipo
-    return jugadores_posicionar
+    return jugadores_posicionar, cancha
 
 
 """
 BLOQUE 6
 OBSTACULOS
 """
+def pedir_entero(mensaje):
+    while True:
+        try:
+            numero = int(input(mensaje))
+            return numero
+        except ValueError:
+            print("Error: debe ingresar un numero entero.")
 
+def opcion_crear_obstaculo(filas_validas, columnas_validas, obstaculo_cancha):
+
+    obstaculo_fila = pedir_entero("Agregar fila del obstaculo (-1 para cancelar): ")
+
+    while obstaculo_fila != -1:
+
+        while not posicion_valida(obstaculo_fila, filas_validas):
+            print("Error: la fila (" + str(obstaculo_fila) + ") esta fuera de la cancha.")
+            obstaculo_fila = pedir_entero("Agregar fila del obstaculo (-1 para cancelar): ")
+
+            if obstaculo_fila == -1:
+                return obstaculo_cancha
+
+        obstaculo_columna = pedir_entero("Ingresar la columna donde se ubica el obstaculo: ")
+
+        while not posicion_valida(obstaculo_columna, columnas_validas):
+            print("Error: la columna (" + str(obstaculo_columna) + ") esta fuera de la cancha.")
+            obstaculo_columna = pedir_entero("Ingresar la columna donde se ubica el obstaculo: ")
+
+        if celda_ocupada(obstaculo_cancha, obstaculo_fila, obstaculo_columna):
+            print("Error: la celda ya esta ocupada.")
+        else:
+            obstaculo_cancha = agregar_obstaculo(obstaculo_cancha, obstaculo_fila, obstaculo_columna)
+
+        obstaculo_fila = pedir_entero("Agregar fila del obstaculo (-1 para cancelar): ")
+
+    return obstaculo_cancha
+    
 # funcion encargada de agregar un obstaculo en la cancha
 def agregar_obstaculo(cancha, fila, columna):
     cancha[fila][columna] = "X"
     print("Obstaculo agregado correctamente en (" + str(fila) + ", " + str(columna) + ").")
-
+    return cancha
 
 """
 BLOQUE 7
@@ -254,30 +317,19 @@ DISTANCIA A LA PELOTA - TAREA 4
 
 # funcion encargada de buscar y devolver el jugador que tiene la pelota
 
-def obtener_jugador_con_pelota(jugadores):
+def obtener_jugador_con_pelota(pelota_jugadores):
 
     jugador_con_pelota = None
 
-    for id_jugador in jugadores:
+    for id_jugador in pelota_jugadores:
 
-        jugador = jugadores[id_jugador]
+        jugador = pelota_jugadores[id_jugador]
 
-        if jugador["tiene_pelota"] == True:
+        if jugador["tiene_pelota"] == "S":
 
             jugador_con_pelota = jugador
 
     return jugador_con_pelota
-
-# funcion encargada de calcular y mostrar la distancia Manhattan de cada jugador a la pelota
-
-def obtener_jugador_con_pelota(jugadores):
-    for id_jugador in jugadores:
-        jugador = jugadores[id_jugador]
-
-        if jugador["tiene_pelota"] == True:
-            return jugador
-
-    return None
 
 
 def calcular_distancias_a_pelota(jugadores, equipo_buscado):
@@ -488,77 +540,184 @@ BLOQUE 10
 PROGRAMA PRINCIPAL DE PRUEBA
 
 """
+def borrar_pantalla():
 
-def main():
+    print("\n" * 50)
     
-    
-    temp_nombre = ""
+def submenu():
     # declaramos las constantes de filas y columnas de la cancha
     filas = 100
     columnas = 60
     # roles y equipos validos segun la consigna
     roles_validos = ["arquero", "defensor", "mediocampista", "delantero"]
     equipos_validos = ["A", "B"]
-    valor_valido = False
     jugadores = {}
+    submenu_seleccion = -1
     # creamos la matriz de la cancha
-
     matriz_cancha = crear_cancha(filas, columnas)
+    imprimir_matriz(matriz_cancha)
+    while submenu_seleccion != 0:
 
-    print("Cancha creada correctamente.")
-    temp_nombre = input("Ingresar Nombre del jugador (NO para cancelar): ")
-    while temp_nombre != "NO":
-        # posicionamos jugadores de prueba
-        temp_equipo = input("Ingresar el equipo del jugador: " )
-        while not equipo_valido(temp_equipo, equipos_validos):
-            print("Error: el equipo " + temp_equipo + " no es valido. Use A o B.")
-            temp_equipo = input("Ingresar el equipo del jugador: " )
-        while valor_valido == False:
-            try:
-                temp_fila= int(input("Ingresar la fila donde se ubica el jugador: "))
-                while not posicion_valida(temp_fila, filas):
-                    print("Error: la fila (" + str(temp_fila) + ") esta fuera de la cancha.")
-                    temp_fila= int(input("Ingresar la fila donde se ubica el jugador: "))
-                valor_valido = True
-            except ValueError:
-                print("La opcion ingresada no es valida. Debe ingresar un numero.")
-        valor_valido = False
-        while valor_valido == False:
-            try:
-                temp_columna= int(input("Ingresar la columna donde se ubica el jugador: "))
-                while not posicion_valida(temp_columna, columnas):
-                    print("Error: la columna (", str(temp_columna), ") esta fuera de la cancha.")
-                    temp_columna= int(input("Ingresar la columna donde se ubica el jugador: "))
-                valor_valido = True
-            except ValueError:
-                print("La opcion ingresada no es valida. Debe ingresar un numero.")
-        temp_rol = input("Ingresar el rol jugador: " )
-        while not rol_valido(temp_rol, roles_validos):
-            print("Error: el rol " + temp_rol + " no es valido.")
-            temp_rol = input("Ingresar el rol jugador: " )
-    
-        if obtener_jugador_con_pelota(jugadores) != None:
-            temp_pelota = "N"
-        else:
-            temp_pelota = input("El jugador tiene la pelota? (S/N): " )
-            while not pelota_validar(temp_pelota):
-                print("Error: el valor no es valido.")
-                temp_pelota = input("El jugador tiene la pelota? (S/N): " )
-        jugadores = posicionar_jugador(matriz_cancha, jugadores, temp_nombre, temp_equipo, temp_fila, temp_columna, temp_rol, temp_pelota)
-        temp_nombre = input("Ingresar Nombre del jugador (NO para cancelar): ")
-    # agregamos un obstaculo para probar movimientos invalidos
+        # mostramos las opciones disponibles para el usuario
+
+        print("\n========== MENU PRINCIPAL ==========")
+        print("1 - Agregar jugador")
+        print("2 - Agregar obstaculo")
+        print("3 - Mover jugador")
+        print("0 - Volver")
+
+        # pedimos al usuario que ingrese una opcion del menu
+        # usamos try/except porque int() puede fallar si el usuario escribe una letra,
+        # deja el campo vacio o ingresa cualquier dato que no pueda convertirse a numero
+
+        try:
+            submenu_seleccion = int(input("\nIngrese una opcion: "))
         
-    obstaculo_fila = int(input("Agregar fila del obstaculo (-1 para cancelar): "))
-    while obstaculo_fila != -1:
-        while not posicion_valida(obstaculo_fila, filas):
-            print("Error: la fila (" + str(obstaculo_fila) + ") esta fuera de la cancha.")
-            obstaculo_fila = int(input("Agregar fila del obstaculo (-1 para cancelar): "))
-        obstaculo_columna= int(input("Ingresar la columna donde se ubica el obstaculo: "))
-        while not posicion_valida(obstaculo_columna, columnas):
-            print("Error: la columna (", str(obstaculo_columna), ") esta fuera de la cancha.")
-            obstaculo_columna= int(input("Ingresar la columna donde se ubica el jugador: "))
-        agregar_obstaculo(matriz_cancha, obstaculo_fila, obstaculo_columna)
-        obstaculo_fila = int(input("Agregar fila del obstaculo (-1 para cancelar): "))
+        except ValueError:
+
+            # si el usuario no ingresa un numero valido, limpiamos la pantalla
+            # mostramos un mensaje de error y usamos continue para volver al inicio del while
+            # de esta forma evitamos que el programa se rompa o que siga evaluando opciones invalidas
+
+            borrar_pantalla()
+            print("La opcion ingresada no es valida. Debe ingresar un numero de las opciones del menu.")
+            continue
+        
+        # si el usuario ingresa 1, mostramos las instrucciones de uso del programa
+
+        if submenu_seleccion == 1:
+            jugadores, matriz_cancha = opcion_crear_jugador(jugadores, equipos_validos, filas, columnas, roles_validos, matriz_cancha)
+            borrar_pantalla()
+            imprimir_matriz(matriz_cancha)
+        elif submenu_seleccion == 2:
+            matriz_cancha=opcion_crear_obstaculo(filas, columnas, matriz_cancha)
+            borrar_pantalla()
+            imprimir_matriz(matriz_cancha)
+
+def main():
+    # inicializamos menu_seleccion en -1 para poder entrar al while
+    # usamos -1 porque es distinto de 0, entonces el menu se ejecuta al menos una vez
+
+    menu_seleccion = -1
+
+    # mientras el usuario no ingrese 0, el menu seguira ejecutandose
+    # la opcion 0 se usa para salir del programa
+
+    while menu_seleccion != 0:
+
+        # mostramos las opciones disponibles para el usuario
+
+        print("\n========== MENU PRINCIPAL ==========")
+        print("1 - Modo de uso")
+        print("2 - Ejecutar prediccion")
+        print("3 - Acerca de")
+        print("0 - Salir")
+
+        # pedimos al usuario que ingrese una opcion del menu
+        # usamos try/except porque int() puede fallar si el usuario escribe una letra,
+        # deja el campo vacio o ingresa cualquier dato que no pueda convertirse a numero
+
+        try:
+            menu_seleccion = int(input("\nIngrese una opcion: "))
+        
+        except ValueError:
+
+            # si el usuario no ingresa un numero valido, limpiamos la pantalla
+            # mostramos un mensaje de error y usamos continue para volver al inicio del while
+            # de esta forma evitamos que el programa se rompa o que siga evaluando opciones invalidas
+
+            borrar_pantalla()
+            print("La opcion ingresada no es valida. Debe ingresar un numero de las opciones del menu.")
+            continue
+        
+        # si el usuario ingresa 1, mostramos las instrucciones de uso del programa
+
+        if menu_seleccion == 1:
+
+            borrar_pantalla()
+
+            print("\n========== MODO DE USO ==========\n")
+
+            # explicamos como debe llamarse el archivo, donde debe ubicarse
+            # y que caracteres se pueden utilizar en la secuencia
+
+            print("1. Crear un archivo llamado penales.txt")
+            print("2. Colocar el archivo en la misma carpeta del programa")
+            print("3. Ingresar una secuencia utilizando:")
+            print("   L = izquierda")
+            print("   R = derecha")
+            print("   C = centro")
+            print("4. Ejecutar la opcion 2 del menu")
+
+            print("\nEjemplo de archivo:\n")
+
+            print("LRRCLRRLLR")
+
+        # si el usuario ingresa 2, ejecutamos la prediccion de penales
+
+        elif menu_seleccion == 2:
+
+            borrar_pantalla()
+
+            print("\n========== RESULTADO ==========\n")
+
+            # llamamos a ejecutar_prediccion(), que se encarga de leer el archivo,
+            # validar la secuencia, contar direcciones,
+            # calcular la direccion dominante e imprimir el resultado
+
+            submenu()
+            borrar_pantalla()
+
+        # si el usuario ingresa 3, mostramos informacion general del proyecto
+
+        elif menu_seleccion == 3:
+
+            borrar_pantalla()
+
+            print("\n========== ACERCA DE ==========\n")
+
+            print("Proyecto realizado para la Copa de Algoritmia y Programacion UADE 2026.\n")
+
+            print("Integrantes del equipo:")
+            print("- Lucas Abad")
+            print("- Thiago Albornoz")
+            print("- Valentino Sarniguette")
+            print("- Gaston Trezeguet")
+            print("- Valentin Zaccari")
+
+            
+
+            print("""        ___________
+       '._==_==_=_.'
+       .-\\:      /-.
+      |   \\     /   |
+       \\   \\   /   /
+        '.  \\ /  .'
+          '-._.-'
+            | |
+           _| |_
+          '-----'""")
+    
+        # si el usuario ingresa 0, se corta el ciclo porque menu_seleccion deja de ser distinto de 0
+
+        elif menu_seleccion == 0:
+
+            borrar_pantalla()
+
+            print("Saliendo del programa...")
+
+        # si el usuario ingresa un numero que no corresponde a ninguna opcion,
+        # mostramos un mensaje de error y el while vuelve a mostrar el menu
+
+        else:
+
+            borrar_pantalla()
+
+            print("La opcion ingresada no existe. Por favor, ingresar una opcion valida.")
+    
+    
+    
+
             
     # probamos movimiento hacia obstaculo
     

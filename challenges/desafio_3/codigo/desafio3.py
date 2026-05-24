@@ -652,13 +652,13 @@ def opcion_crear_jugador(jugadores, cancha):
 
     while nombre.upper() != "NO":
 
-        equipo = input("Ingresar el equipo del jugador (A/B): ").upper()
+        equipo = input("Ingresar el equipo del jugador (A/B): ").strip().upper()
 
         while not equipo_valido(equipo):
 
             print("Error: el equipo " + equipo + " no es valido. Use A o B.")
 
-            equipo = input("Ingresar el equipo del jugador (A/B): ").upper()
+            equipo = input("Ingresar el equipo del jugador (A/B): ").strip().upper()
 
         fila = pedir_posicion_valida("Ingresar la fila donde se ubica el jugador: ", FILAS, "fila")
 
@@ -672,13 +672,13 @@ def opcion_crear_jugador(jugadores, cancha):
 
             columna = pedir_posicion_valida("Ingresar la columna donde se ubica el jugador: ", COLUMNAS, "columna")
 
-        rol = input("Ingresar el rol del jugador: ").lower()
+        rol = input("Ingresar el rol del jugador: ").strip().lower()
 
         while not rol_valido(rol):
 
             print("Error: el rol " + rol + " no es valido.")
 
-            rol = input("Ingresar el rol del jugador: ").lower()
+            rol = input("Ingresar el rol del jugador: ").strip().lower()
 
         if obtener_jugador_con_pelota(jugadores) != None:
 
@@ -688,13 +688,13 @@ def opcion_crear_jugador(jugadores, cancha):
 
         else:
 
-            tiene_pelota = input("El jugador tiene la pelota? (S/N): ").upper()
+            tiene_pelota = input("El jugador tiene la pelota? (S/N): ").strip().upper()
 
             while not pelota_valida(tiene_pelota):
 
                 print("Error: el valor no es valido. Ingrese S o N.")
 
-                tiene_pelota = input("El jugador tiene la pelota? (S/N): ").upper()
+                tiene_pelota = input("El jugador tiene la pelota? (S/N): ").strip().upper()
 
         agregado = posicionar_jugador(cancha, jugadores, nombre, equipo, fila, columna, rol, tiene_pelota)
 
@@ -756,14 +756,13 @@ def opcion_mover_jugador(cancha, jugadores):
 
         else:
 
-            direccion = input("Elegir hacia donde mover el jugador (arriba/abajo/izquierda/derecha): ").lower()
+            direccion = input("Elegir hacia donde mover el jugador (arriba/abajo/izquierda/derecha): ").strip().lower()
 
             while not direccion_valida(direccion):
 
                 print("Error: direccion invalida.")
 
-                direccion = input("Elegir hacia donde mover el jugador (arriba/abajo/izquierda/derecha): ").lower()
-
+                direccion = input("Elegir hacia donde mover el jugador (arriba/abajo/izquierda/derecha): ").strip().lower()
             mover_jugador(cancha, jugadores[jugador_seleccionado], direccion)
 
     return cancha, jugadores
@@ -795,7 +794,7 @@ def opcion_analizar_jugada(cancha, jugadores):
         detectar_caminos_libres_al_arco(cancha, jugadores)
 
 """
-BLOQUE 10.5
+BLOQUE 11
 CREAR ESCENARIO DE PRUEBA
 """
 
@@ -808,6 +807,7 @@ def cargar_escenario_prueba():
 
     posicionar_jugador(cancha, jugadores, "Messi", "A", 50, 20, "delantero", "S")
     posicionar_jugador(cancha, jugadores, "Otamendi", "A", 50, 10, "defensor", "N")
+    posicionar_jugador(cancha, jugadores, "Di Maria", "A", 50, 30, "mediocampista", "N")
     posicionar_jugador(cancha, jugadores, "Julian", "A", 40, 45, "delantero", "N")
     posicionar_jugador(cancha, jugadores, "Lautaro", "A", 70, 45, "delantero", "N")
 
@@ -817,13 +817,18 @@ def cargar_escenario_prueba():
     agregar_obstaculo(cancha, 40, 50)
 
     print("\nEscenario de prueba cargado correctamente.")
-    print("Este escenario permite probar distancias, pases bloqueados, pases posibles y camino libre al arco.")
+    print("Este escenario permite probar:")
+    print("- Distancias a la pelota.")
+    print("- Pase bloqueado por rival entre Messi y Otamendi.")
+    print("- Pase posible entre Messi y Di Maria.")
+    print("- Camino al arco bloqueado para Julian por obstaculo.")
+    print("- Camino libre al arco para otros delanteros segun su posicion.")
 
     return cancha, jugadores
 
 
 """
-BLOQUE 11
+BLOQUE 12
 MENU
 """
 
@@ -996,7 +1001,7 @@ def main():
 
 
 """
-BLOQUE 12
+BLOQUE 13
 INICIO
 """
 

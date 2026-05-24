@@ -853,6 +853,7 @@ def mostrar_modo_de_uso():
     print("9. Puede cargarse un escenario de prueba automatico desde el simulador.")
     print("10. Para cancelar la carga de jugadores, escribir NO como nombre.")
     print("11. La opcion Reiniciar cancha permite borrar jugadores y obstaculos para comenzar otra jugada.")
+    print("12. Simbolos de la cancha: . = vacio, A = Argentina, B = Brasil, X = obstaculo.")
 
 
 def submenu():
@@ -911,6 +912,9 @@ def submenu():
             listar_jugadores(jugadores)
 
         elif submenu_seleccion == 6:
+
+            print("\nLa cancha completa tiene 100 filas y 60 columnas.")
+            print("Se mostrara la matriz completa:\n")
 
             imprimir_matriz(matriz_cancha)
         

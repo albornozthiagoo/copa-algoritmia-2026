@@ -804,6 +804,7 @@ def cargar_escenario_prueba():
     jugadores = {}
 
     print("\nCargando escenario de prueba...")
+    print("Atencion: se reemplazara la cancha actual por un escenario automatico.")
 
     posicionar_jugador(cancha, jugadores, "Messi", "A", 50, 20, "delantero", "S")
     posicionar_jugador(cancha, jugadores, "Otamendi", "A", 50, 10, "defensor", "N")
@@ -850,6 +851,8 @@ def mostrar_modo_de_uso():
     print("7. Los equipos validos son A para Argentina y B para Brasil.")
     print("8. Los roles validos son arquero, defensor, mediocampista y delantero.")
     print("9. Puede cargarse un escenario de prueba automatico desde el simulador.")
+    print("10. Para cancelar la carga de jugadores, escribir NO como nombre.")
+    print("11. La opcion Reiniciar cancha permite borrar jugadores y obstaculos para comenzar otra jugada.")
 
 
 def submenu():
@@ -872,6 +875,7 @@ def submenu():
         print("5 - Listar jugadores")
         print("6 - Mostrar cancha")
         print("7 - Cargar escenario de prueba")
+        print("8 - Reiniciar cancha ")
         print("0 - Volver")
 
         try:
@@ -913,6 +917,13 @@ def submenu():
         elif submenu_seleccion == 7:
 
             matriz_cancha, jugadores = cargar_escenario_prueba()
+
+        elif submenu_seleccion == 8:
+
+            matriz_cancha = crear_cancha()
+            jugadores = {}
+
+            print("Cancha reiniciada correctamente. Se eliminaron jugadores y obstaculos cargados.")
 
         elif submenu_seleccion == 0:
 

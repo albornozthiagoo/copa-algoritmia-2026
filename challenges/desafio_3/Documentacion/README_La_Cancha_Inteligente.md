@@ -1,4 +1,4 @@
-# La Cancha Inteligente
+🏟️# La Cancha Inteligente
 
 **Desafio 3 - Copa de Algoritmia y Programacion UADE 2026**  
 **Carreras de Informatica y Sistemas**

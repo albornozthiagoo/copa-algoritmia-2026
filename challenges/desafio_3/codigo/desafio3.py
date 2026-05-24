@@ -631,16 +631,15 @@ def pedir_posicion_valida(mensaje, limite, nombre_posicion):
 
 def pedir_nombre_jugador():
 
-    nombre = input("Ingresar nombre del jugador (NO para cancelar): ")
+    nombre = input("Ingresar nombre del jugador (NO para cancelar): ").strip()
 
     while nombre == "":
 
         print("Error: el nombre no puede estar vacio.")
 
-        nombre = input("Ingresar nombre del jugador (NO para cancelar): ")
+        nombre = input("Ingresar nombre del jugador (NO para cancelar): ").strip()
 
     return nombre
-
 
 """
 BLOQUE 10
@@ -651,7 +650,7 @@ def opcion_crear_jugador(jugadores, cancha):
 
     nombre = pedir_nombre_jugador()
 
-    while nombre != "NO":
+    while nombre.upper() != "NO":
 
         equipo = input("Ingresar el equipo del jugador (A/B): ").upper()
 
@@ -697,7 +696,11 @@ def opcion_crear_jugador(jugadores, cancha):
 
                 tiene_pelota = input("El jugador tiene la pelota? (S/N): ").upper()
 
-        posicionar_jugador(cancha, jugadores, nombre, equipo, fila, columna, rol, tiene_pelota)
+        agregado = posicionar_jugador(cancha, jugadores, nombre, equipo, fila, columna, rol, tiene_pelota)
+
+        if agregado == True and tiene_pelota == "S":
+
+            print("La pelota quedo asignada a " + nombre + ".")
 
         nombre = pedir_nombre_jugador()
 
@@ -791,6 +794,33 @@ def opcion_analizar_jugada(cancha, jugadores):
 
         detectar_caminos_libres_al_arco(cancha, jugadores)
 
+"""
+BLOQUE 10.5
+CREAR ESCENARIO DE PRUEBA
+"""
+
+def cargar_escenario_prueba():
+
+    cancha = crear_cancha()
+    jugadores = {}
+
+    print("\nCargando escenario de prueba...")
+
+    posicionar_jugador(cancha, jugadores, "Messi", "A", 50, 20, "delantero", "S")
+    posicionar_jugador(cancha, jugadores, "Otamendi", "A", 50, 10, "defensor", "N")
+    posicionar_jugador(cancha, jugadores, "Julian", "A", 40, 45, "delantero", "N")
+    posicionar_jugador(cancha, jugadores, "Lautaro", "A", 70, 45, "delantero", "N")
+
+    posicionar_jugador(cancha, jugadores, "Neymar", "B", 50, 15, "delantero", "N")
+    posicionar_jugador(cancha, jugadores, "Vini", "B", 60, 15, "delantero", "N")
+
+    agregar_obstaculo(cancha, 40, 50)
+
+    print("\nEscenario de prueba cargado correctamente.")
+    print("Este escenario permite probar distancias, pases bloqueados, pases posibles y camino libre al arco.")
+
+    return cancha, jugadores
+
 
 """
 BLOQUE 11
@@ -814,6 +844,7 @@ def mostrar_modo_de_uso():
     print("6. La cancha tiene 100 filas y 60 columnas.")
     print("7. Los equipos validos son A para Argentina y B para Brasil.")
     print("8. Los roles validos son arquero, defensor, mediocampista y delantero.")
+    print("9. Puede cargarse un escenario de prueba automatico desde el simulador.")
 
 
 def submenu():
@@ -835,6 +866,7 @@ def submenu():
         print("4 - Analizar jugada")
         print("5 - Listar jugadores")
         print("6 - Mostrar cancha")
+        print("7 - Cargar escenario de prueba")
         print("0 - Volver")
 
         try:
@@ -872,6 +904,10 @@ def submenu():
         elif submenu_seleccion == 6:
 
             imprimir_matriz(matriz_cancha)
+        
+        elif submenu_seleccion == 7:
+
+            matriz_cancha, jugadores = cargar_escenario_prueba()
 
         elif submenu_seleccion == 0:
 

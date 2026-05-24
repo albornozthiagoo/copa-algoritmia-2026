@@ -924,7 +924,7 @@ def submenu():
         print("5 - Listar jugadores")
         print("6 - Mostrar cancha")
         print("7 - Cargar escenario de prueba")
-        print("8 - Reiniciar cancha ")
+        print("8 - Reiniciar cancha")
         print("9 - Borrar jugador")
         print("0 - Volver")
 

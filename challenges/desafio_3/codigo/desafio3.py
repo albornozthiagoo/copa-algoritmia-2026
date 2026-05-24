@@ -706,6 +706,53 @@ def opcion_crear_jugador(jugadores, cancha):
 
     return jugadores, cancha
 
+def opcion_borrar_jugador(cancha, jugadores):
+
+    listar_jugadores(jugadores)
+
+    if len(jugadores) == 0:
+
+        print("No hay jugadores cargados para borrar.")
+
+    else:
+
+        jugador_seleccionado = pedir_entero("Elegir el Nro del jugador a borrar (0 para cancelar): ")
+
+        while jugador_seleccionado != 0 and jugador_seleccionado not in jugadores:
+
+            print("Error: no existe un jugador con ese numero.")
+
+            jugador_seleccionado = pedir_entero("Elegir el Nro del jugador a borrar (0 para cancelar): ")
+
+        if jugador_seleccionado == 0:
+
+            print("Borrado cancelado.")
+
+        else:
+
+            jugador = jugadores[jugador_seleccionado]
+
+            fila = jugador["fila"]
+            columna = jugador["columna"]
+
+            # limpiamos la posicion del jugador en la matriz
+            cancha[fila][columna] = "."
+
+            # guardamos datos para mostrar el mensaje antes de eliminarlo
+            nombre = jugador["nombre"]
+            tenia_pelota = jugador["tiene_pelota"]
+
+            # eliminamos el jugador del diccionario
+            del jugadores[jugador_seleccionado]
+
+            print("Jugador " + nombre + " borrado correctamente.")
+
+            if tenia_pelota == "S":
+
+                print("Atencion: el jugador borrado tenia la pelota. Ahora no hay pelota en juego.")
+
+    return cancha, jugadores
+
 
 def opcion_crear_obstaculo(cancha):
 
@@ -854,6 +901,7 @@ def mostrar_modo_de_uso():
     print("10. Para cancelar la carga de jugadores, escribir NO como nombre.")
     print("11. La opcion Reiniciar cancha permite borrar jugadores y obstaculos para comenzar otra jugada.")
     print("12. Simbolos de la cancha: . = vacio, A = Argentina, B = Brasil, X = obstaculo.")
+    print("13. La opcion Borrar jugador permite eliminar un jugador y liberar su posicion en la cancha.")
 
 
 def submenu():
@@ -877,6 +925,7 @@ def submenu():
         print("6 - Mostrar cancha")
         print("7 - Cargar escenario de prueba")
         print("8 - Reiniciar cancha ")
+        print("9 - Borrar jugador")
         print("0 - Volver")
 
         try:
@@ -928,6 +977,10 @@ def submenu():
             jugadores = {}
 
             print("Cancha reiniciada correctamente. Se eliminaron jugadores y obstaculos cargados.")
+        
+        elif submenu_seleccion == 9:
+
+            matriz_cancha, jugadores = opcion_borrar_jugador(matriz_cancha, jugadores)
 
         elif submenu_seleccion == 0:
 

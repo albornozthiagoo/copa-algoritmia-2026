@@ -3,12 +3,15 @@ DESAFIO 3 - LA CANCHA INTELIGENTE
 Copa de Algoritmia y Programacion UADE 2026
 """
 
+import random
+
+
 """
 BLOQUE 1
 CONSTANTES Y CREACION DE LA CANCHA
 """
 
-FILAS = 100
+FILAS = 40
 COLUMNAS = 60
 
 ROLES_VALIDOS = ["arquero", "defensor", "mediocampista", "delantero"]
@@ -261,6 +264,117 @@ def agregar_obstaculo(cancha, fila, columna):
         agregado = True
 
     return agregado
+
+
+"""
+BLOQUE 4.1
+ARBITRO Y SOMBRA
+"""
+
+def crear_arbitro():
+
+    arbitro = {
+        "posiciones_bloqueadas": []
+    }
+
+    return arbitro
+
+
+def limpiar_arbitro_y_sombra(cancha, arbitro):
+
+    for posicion in arbitro["posiciones_bloqueadas"]:
+
+        fila = posicion[0]
+        columna = posicion[1]
+
+        if posicion_valida(fila, columna):
+
+            if cancha[fila][columna] == "X":
+
+                cancha[fila][columna] = "."
+
+    arbitro["posiciones_bloqueadas"] = []
+
+
+def agregar_arbitro_y_sombra(cancha, arbitro, fila, columna):
+
+    posiciones = [
+        [fila, columna],
+        [fila - 1, columna],
+        [fila + 1, columna],
+        [fila, columna - 1],
+        [fila, columna + 1]
+    ]
+
+    posiciones_agregadas = []
+
+    for posicion in posiciones:
+
+        fila_actual = posicion[0]
+        columna_actual = posicion[1]
+
+        if posicion_valida(fila_actual, columna_actual):
+
+            if cancha[fila_actual][columna_actual] == ".":
+
+                cancha[fila_actual][columna_actual] = "X"
+
+                posiciones_agregadas.append([fila_actual, columna_actual])
+
+    arbitro["posiciones_bloqueadas"] = posiciones_agregadas
+
+    if len(posiciones_agregadas) > 0:
+
+        print("Arbitro y sombra ubicados cerca de la jugada.")
+
+    else:
+
+        print("No se pudo ubicar al arbitro porque no habia celdas libres cercanas.")
+
+
+def mover_arbitro_cerca_de_la_jugada(cancha, jugadores, arbitro):
+
+    jugador_con_pelota = obtener_jugador_con_pelota(jugadores)
+
+    if jugador_con_pelota == None:
+
+        print("No se movio el arbitro porque no hay jugador con pelota.")
+
+    else:
+
+        limpiar_arbitro_y_sombra(cancha, arbitro)
+
+        fila_pelota = jugador_con_pelota["fila"]
+        columna_pelota = jugador_con_pelota["columna"]
+
+        encontrado = False
+        intentos = 0
+
+        while intentos < 30 and encontrado == False:
+
+            desplazamiento_fila = random.randint(-3, 3)
+            desplazamiento_columna = random.randint(-3, 3)
+
+            nueva_fila = fila_pelota + desplazamiento_fila
+            nueva_columna = columna_pelota + desplazamiento_columna
+
+            # evitamos poner al arbitro exactamente sobre la pelota
+            # y buscamos que quede cerca de la jugada
+            if desplazamiento_fila != 0 or desplazamiento_columna != 0:
+
+                if posicion_valida(nueva_fila, nueva_columna):
+
+                    if cancha[nueva_fila][nueva_columna] == ".":
+
+                        agregar_arbitro_y_sombra(cancha, arbitro, nueva_fila, nueva_columna)
+
+                        encontrado = True
+
+            intentos = intentos + 1
+
+        if encontrado == False:
+
+            print("No se encontro una posicion libre para mover al arbitro cerca de la jugada.")
 
 
 """
@@ -641,6 +755,7 @@ def pedir_nombre_jugador():
 
     return nombre
 
+
 """
 BLOQUE 10
 OPCIONES DEL SUBMENU
@@ -706,6 +821,7 @@ def opcion_crear_jugador(jugadores, cancha):
 
     return jugadores, cancha
 
+
 def opcion_borrar_jugador(cancha, jugadores):
 
     listar_jugadores(jugadores)
@@ -735,14 +851,11 @@ def opcion_borrar_jugador(cancha, jugadores):
             fila = jugador["fila"]
             columna = jugador["columna"]
 
-            # limpiamos la posicion del jugador en la matriz
             cancha[fila][columna] = "."
 
-            # guardamos datos para mostrar el mensaje antes de eliminarlo
             nombre = jugador["nombre"]
             tenia_pelota = jugador["tiene_pelota"]
 
-            # eliminamos el jugador del diccionario
             del jugadores[jugador_seleccionado]
 
             print("Jugador " + nombre + " borrado correctamente.")
@@ -810,12 +923,13 @@ def opcion_mover_jugador(cancha, jugadores):
                 print("Error: direccion invalida.")
 
                 direccion = input("Elegir hacia donde mover el jugador (arriba/abajo/izquierda/derecha): ").strip().lower()
+
             mover_jugador(cancha, jugadores[jugador_seleccionado], direccion)
 
     return cancha, jugadores
 
 
-def opcion_analizar_jugada(cancha, jugadores):
+def opcion_analizar_jugada(cancha, jugadores, arbitro):
 
     jugador_con_pelota = obtener_jugador_con_pelota(jugadores)
 
@@ -834,11 +948,14 @@ def opcion_analizar_jugada(cancha, jugadores):
         print("Jugador con pelota: " + jugador_con_pelota["nombre"])
         print("Equipo con pelota: " + jugador_con_pelota["equipo"])
 
+        mover_arbitro_cerca_de_la_jugada(cancha, jugadores, arbitro)
+
         listar_pases_posibles(cancha, jugadores)
 
         calcular_distancias_a_pelota(jugadores)
 
         detectar_caminos_libres_al_arco(cancha, jugadores)
+
 
 """
 BLOQUE 11
@@ -853,16 +970,16 @@ def cargar_escenario_prueba():
     print("\nCargando escenario de prueba...")
     print("Atencion: se reemplazara la cancha actual por un escenario automatico.")
 
-    posicionar_jugador(cancha, jugadores, "Messi", "A", 50, 20, "delantero", "S")
-    posicionar_jugador(cancha, jugadores, "Otamendi", "A", 50, 10, "defensor", "N")
-    posicionar_jugador(cancha, jugadores, "Di Maria", "A", 50, 30, "mediocampista", "N")
-    posicionar_jugador(cancha, jugadores, "Julian", "A", 40, 45, "delantero", "N")
-    posicionar_jugador(cancha, jugadores, "Lautaro", "A", 70, 45, "delantero", "N")
+    posicionar_jugador(cancha, jugadores, "Messi", "A", 20, 20, "delantero", "S")
+    posicionar_jugador(cancha, jugadores, "Otamendi", "A", 20, 10, "defensor", "N")
+    posicionar_jugador(cancha, jugadores, "Di Maria", "A", 20, 30, "mediocampista", "N")
+    posicionar_jugador(cancha, jugadores, "Julian", "A", 15, 45, "delantero", "N")
+    posicionar_jugador(cancha, jugadores, "Lautaro", "A", 30, 45, "delantero", "N")
 
-    posicionar_jugador(cancha, jugadores, "Neymar", "B", 50, 15, "delantero", "N")
-    posicionar_jugador(cancha, jugadores, "Vini", "B", 60, 15, "delantero", "N")
+    posicionar_jugador(cancha, jugadores, "Neymar", "B", 20, 15, "delantero", "N")
+    posicionar_jugador(cancha, jugadores, "Vini", "B", 25, 15, "delantero", "N")
 
-    agregar_obstaculo(cancha, 40, 50)
+    agregar_obstaculo(cancha, 15, 50)
 
     print("\nEscenario de prueba cargado correctamente.")
     print("Este escenario permite probar:")
@@ -871,6 +988,7 @@ def cargar_escenario_prueba():
     print("- Pase posible entre Messi y Di Maria.")
     print("- Camino al arco bloqueado para Julian por obstaculo.")
     print("- Camino libre al arco para otros delanteros segun su posicion.")
+    print("- Movimiento del arbitro y su sombra como zonas bloqueadas al analizar la jugada.")
 
     return cancha, jugadores
 
@@ -894,14 +1012,16 @@ def mostrar_modo_de_uso():
     print("3. Agregar obstaculos si se desea.")
     print("4. Mover jugadores seleccionandolos por su numero.")
     print("5. Ejecutar el analisis tactico para ver distancias, pases posibles y camino libre al arco.")
-    print("6. La cancha tiene 100 filas y 60 columnas.")
-    print("7. Los equipos validos son A para Argentina y B para Brasil.")
-    print("8. Los roles validos son arquero, defensor, mediocampista y delantero.")
-    print("9. Puede cargarse un escenario de prueba automatico desde el simulador.")
-    print("10. Para cancelar la carga de jugadores, escribir NO como nombre.")
-    print("11. La opcion Reiniciar cancha permite borrar jugadores y obstaculos para comenzar otra jugada.")
-    print("12. Simbolos de la cancha: . = vacio, A = Argentina, B = Brasil, X = obstaculo.")
-    print("13. La opcion Borrar jugador permite eliminar un jugador y liberar su posicion en la cancha.")
+    print("6. La cancha tiene 40 filas y 60 columnas.")
+    print("7. Filas validas: 0 a 39. Columnas validas: 0 a 59.")
+    print("8. Los equipos validos son A para Argentina y B para Brasil.")
+    print("9. Los roles validos son arquero, defensor, mediocampista y delantero.")
+    print("10. Puede cargarse un escenario de prueba automatico desde el simulador.")
+    print("11. Para cancelar la carga de jugadores, escribir NO como nombre.")
+    print("12. La opcion Reiniciar cancha permite borrar jugadores y obstaculos para comenzar otra jugada.")
+    print("13. Simbolos de la cancha: . = vacio, A = Argentina, B = Brasil, X = obstaculo/arbitro/sombra.")
+    print("14. La opcion Borrar jugador permite eliminar un jugador y liberar su posicion en la cancha.")
+    print("15. Al analizar una jugada, el arbitro se mueve aleatoriamente cerca de la pelota.")
 
 
 def submenu():
@@ -909,6 +1029,8 @@ def submenu():
     jugadores = {}
 
     matriz_cancha = crear_cancha()
+
+    arbitro = crear_arbitro()
 
     submenu_seleccion = -1
 
@@ -954,7 +1076,7 @@ def submenu():
 
         elif submenu_seleccion == 4:
 
-            opcion_analizar_jugada(matriz_cancha, jugadores)
+            opcion_analizar_jugada(matriz_cancha, jugadores, arbitro)
 
         elif submenu_seleccion == 5:
 
@@ -962,22 +1084,25 @@ def submenu():
 
         elif submenu_seleccion == 6:
 
-            print("\nLa cancha completa tiene 100 filas y 60 columnas.")
+            print("\nLa cancha completa tiene 40 filas y 60 columnas.")
             print("Se mostrara la matriz completa:\n")
 
             imprimir_matriz(matriz_cancha)
-        
+
         elif submenu_seleccion == 7:
 
             matriz_cancha, jugadores = cargar_escenario_prueba()
+
+            arbitro = crear_arbitro()
 
         elif submenu_seleccion == 8:
 
             matriz_cancha = crear_cancha()
             jugadores = {}
+            arbitro = crear_arbitro()
 
-            print("Cancha reiniciada correctamente. Se eliminaron jugadores y obstaculos cargados.")
-        
+            print("Cancha reiniciada correctamente. Se eliminaron jugadores, obstaculos y zonas del arbitro.")
+
         elif submenu_seleccion == 9:
 
             matriz_cancha, jugadores = opcion_borrar_jugador(matriz_cancha, jugadores)

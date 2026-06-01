@@ -1,6 +1,6 @@
 import time
 import os
-import robot_goleador
+import challenges.desafio_final.borradores.robot_goleador as robot_goleador
 
 # -----------------------------------------------
 # CODIGOS ANSI

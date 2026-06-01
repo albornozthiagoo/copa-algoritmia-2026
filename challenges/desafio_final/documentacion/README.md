@@ -8,7 +8,7 @@
 ## 📑 Índice
 
 - [Descripción general](#-descripción-general)
-- [Archivos del proyecto](#-archivos-del-proyecto)
+- [Archivo del proyecto](#-archivo-del-proyecto)
 - [Cómo funciona la evaluación](#-cómo-funciona-la-evaluación)
 - [La máquina de estados](#-la-máquina-de-estados)
 - [Constantes](#-constantes)
@@ -36,17 +36,16 @@ En cualquier momento, si el robot detecta que **se está cayendo**, prioriza rec
 
 ---
 
-## 📁 Archivos del proyecto
+## 📁 Archivo del proyecto
 
 | Archivo | Descripción |
 |---|---|
-| `CodigoPrincipal.py` | Archivo de entrega. Contiene la función `control(robot)` y toda la lógica de la estrategia. Es el único archivo que se sube al simulador oficial. |
-| `simulacion_robot.py` | Simulación visual en terminal. Importa `CodigoPrincipal` y lo ejecuta con un robot falso. No se entrega. |
+| `robot_goleador.py` | Archivo único de entrega. Contiene la función `control(robot)` con toda la lógica de la estrategia, más la simulación visual en terminal. Al ejecutarlo directamente corre la simulación; al importarlo desde el simulador oficial expone solo `control(robot)`. |
 
-Para correr la simulación ambos archivos deben estar en la **misma carpeta**:
+Para correr la simulación:
 
 ```bash
-python simulacion_robot.py
+python robot_goleador.py
 ```
 
 ---
@@ -56,8 +55,9 @@ python simulacion_robot.py
 - La entrega es **un único archivo `.py`** que define **obligatoriamente** la función `control(robot)`.
 - El simulador oficial **llama a `control(robot)` muchas veces** durante la ejecución. Ese es el "reloj" del programa.
 - Por eso `control()` hace **una sola acción por llamada y termina**: el avance en el tiempo lo da la repetición, no un bucle interno.
-- **No se usa** `input()`, ni `time.sleep()`, ni bucles infinitos, ni librerías externas. Solo Python estándar.
+- **No se usa** `input()`, ni `time.sleep()` dentro de `control()`, ni bucles infinitos, ni librerías externas. Solo Python estándar.
 - El estado entre llamadas se conserva con **variables globales** (`fase`, contadores, `pateado`).
+- La simulación visual (clases `RobotFalso`, función `simular()`, etc.) **solo se ejecuta** cuando el archivo se corre directamente, gracias al bloque `if __name__ == "__main__"`. El simulador oficial no la activa.
 
 ---
 
@@ -288,14 +288,14 @@ def control(robot):
 
 ## 🧪 Cómo probarlo localmente
 
-Se usa `simulacion_robot.py`, que contiene un **robot falso** que imita la API del simulador oficial. Ambos archivos deben estar en la misma carpeta.
+El archivo incluye una simulación visual en terminal con un **robot falso** que imita la API del simulador oficial. Solo se activa al ejecutarlo directamente:
 
 ```bash
 # Mac / Linux
-python3 simulacion_robot.py
+python3 robot_goleador.py
 
 # Windows
-python simulacion_robot.py
+python robot_goleador.py
 ```
 
 La simulación muestra una cancha en la terminal con:
@@ -310,17 +310,18 @@ La simulación muestra una cancha en la terminal con:
 
 El robot aparece en una **posición aleatoria en la mitad defensiva** en cada corrida. La pelota siempre arranca en el mismo lugar: mitad ofensiva, centro vertical. Durante el recorrido el robot puede sufrir **caídas aleatorias** que activan la recuperación antes de retomar el camino.
 
-Solo se sube a Teams el archivo `CodigoPrincipal.py`.
+Solo se sube a Teams el archivo `robot_goleador.py`.
 
 ---
 
 ## ⚠️ Notas y advertencias
 
+- **Simulación vs. entrega:** el código de simulación (`RobotFalso`, `simular()`, funciones de dibujo) está protegido por `if __name__ == "__main__"`, así que el simulador oficial solo ve `control(robot)` y las funciones de estrategia.
 - **Formato de `estado_torso()`:** el código accede a la bandera como `torso["cayendo"]` (diccionario). Si el simulador oficial devuelve una tupla en vez de un diccionario, esa línea hay que cambiarla por `torso[3]`. Es el punto más frágil de la estrategia.
 - **Ciclos a ojo:** `CICLOS_ESTABILIZAR`, `CICLOS_PREPARACION` y `CICLOS_RECUPERACION` son valores elegidos manualmente. Si en las pruebas oficiales el robot patea inestable o se cae después del golpe, conviene subirlos.
 - **`decidir_fase_por_distancia` sin uso directo:** está definida pero la decisión equivalente está inline en `fase_acercarse`. Se puede usar para refactorizar o se puede quitar sin afectar el comportamiento.
 - **Coherencia de umbrales:** `fase_acercarse` salta a *estabilizar* con `≤ DISTANCIA_PATADA` (0.35), pero las demás fases vuelven a *acercarse* con `> DISTANCIA_CERCA` (0.70). El colchón entre 0.35 y 0.70 evita que el robot oscile entre fases por pequeños movimientos.
-- **Inestabilidad en la simulación:** el robot falso genera caídas aleatorias cada 15 a 35 pasos caminados, con una recuperación de 6 a 14 iteraciones. Esto no afecta al archivo de entrega, es solo parte de la simulación visual.
+- **Inestabilidad en la simulación:** el robot falso genera caídas aleatorias cada 15 a 35 pasos caminados, con una recuperación de 6 a 14 iteraciones. Esto no afecta al comportamiento en el simulador oficial.
 
 ---
 

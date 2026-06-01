@@ -38,8 +38,7 @@ Todo se trabaja en equipo y las entregas se hacen por Teams.
 copa-algoritmia-2026/
 ├── README.md
 ├── challenges/
-├── docs/
 └── assets/
 ```
 
-La carpeta `challenges/` contiene los desafíos, `docs/` se usa para anotaciones y `assets/` guarda recursos como el logo.
+La carpeta `challenges/` contiene los desafíos y `assets/` guarda recursos como el logo.

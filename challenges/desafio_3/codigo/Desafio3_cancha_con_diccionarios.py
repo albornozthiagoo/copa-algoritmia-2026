@@ -1,32 +1,21 @@
+import random
 """
-BLOQUE 1
-CREACION DE LA CANCHA
+BLOQUE
+CREACION DE JUGADOR, CANCHA, OBSTACULO
 """
 
-
-
-# funcion encargada de crear una cancha vacia
+"""
+CREA LA CANCHA
+RECIBE EL ANCHO Y EL LARGO
+DEVUELVE LA MATRIZ CREADA
+"""
 def crear_cancha(ancho, largo):
-
-    # creamos una lista vacia donde vamos a guardar toda la cancha
     cancha = []
-
-    # recorremos las filas de la cancha
     for fila in range(ancho):
-
-        # creamos una nueva fila vacia
         fila_cancha = []
-
-        # recorremos las columnas de la cancha
         for columna in range(largo):
-
-            # agregamos una posicion vacia simulada con un "."
             fila_cancha.append(".")
-
-        # cuando la fila esta completa la agregamos a la cancha
         cancha.append(fila_cancha)
-
-    # devolvemos la cancha ya creada
     return cancha
 
 """
@@ -45,196 +34,178 @@ def crear_jugador(nombre, equipo, fila, columna, rol, tiene_pelota):
     }
 
 """
-CREA LOS JUGADORES
-Recibe: El diccionario de jugadores y dato del jugador
-Devuelve: El diccionario actualizado
+POSICIONA EL JUGADOR EN LA CANCHA
+RECIBE: LA MATRIZ, EL DICCIONARIO, LOS DATOS DEL JUGADOR
+AGREGA EL JUGADOR AL DICCIONARIO Y POSICIONA EL JUGADOR EN LA MATRIZ
+DEVUELVE: EL DICCIONARIO Y LA CANCHA
 """
-def agregar_jugador(jugadores_total, nombre, equipo, fila, columna, rol, tiene_pelota):
-    if len(jugadores_total) == 0:
+def posicionar_jugador(cancha,jugadores_posicionar, nombre, equipo, fila, columna, rol, tiene_pelota):
+    if len(jugadores_posicionar) == 0:
         id_jugador = 1
     else:
-        id_jugador = max(jugadores_total) + 1
+        id_jugador = max(jugadores_posicionar) + 1
 
-    jugadores_total[id_jugador] = crear_jugador(nombre, equipo, fila, columna, rol, tiene_pelota)
-    return jugadores_total
+    jugadores_posicionar[id_jugador] = crear_jugador(nombre, equipo, fila, columna, rol, tiene_pelota)
+    agregado = True
+    cancha [fila][columna] = equipo
+    return jugadores_posicionar, cancha
+
+"""
+AGREGA UN OBSTACULO
+RECIBE: MATRIZ Y LA POSICION DEL OBSTACULO
+DEVUELVE LA MATRIZ
+"""
+def agregar_obstaculo(cancha, fila, columna):
+    cancha[fila][columna] = "X"
+    print("Obstaculo agregado correctamente en (" + str(fila) + ", " + str(columna) + ").")
+    return cancha
+
+"""
+CREA EL ARBITRO
+"""
+def crear_arbitro(fila, columna):
+    return {
+        "fila": fila,
+        "columna": columna
+    }
+
+"""
+COLOCA LA SOMBRA Y EL ARBITRO
+"""
+def colocar_arbitro_y_sombra(cancha, arbitro, filas, columnas):
+    fila_arbitro = arbitro["fila"]
+    columna_arbitro = arbitro["columna"]
+
+    for fila in range(fila_arbitro - 1, fila_arbitro + 2):
+        for columna in range(columna_arbitro - 1, columna_arbitro + 2):
+
+            if posicion_valida(fila, filas) and posicion_valida(columna, columnas):
+
+                if fila == fila_arbitro and columna == columna_arbitro:
+                    cancha[fila][columna] = "X"
+
+                elif cancha[fila][columna] == ".":
+                    cancha[fila][columna] = "X"
+
+    return cancha
+
+"""
+PONE EL ARBITRO CERCA DE LA JUGADA
+"""
+
+def mover_arbitro_cerca_jugada(cancha, jugadores, arbitro, filas, columnas):
+    cancha = limpiar_arbitro_y_sombra(cancha)
+
+    jugador_con_pelota = obtener_jugador_con_pelota(jugadores)
+
+    if jugador_con_pelota == None:
+        cancha = colocar_arbitro_y_sombra(cancha, arbitro, filas, columnas)
+        return cancha
+
+    intentos = 0
+    movido = False
+
+    while intentos < 20 and movido == False:
+        nueva_fila = jugador_con_pelota["fila"] + random.randint(-2, 2)
+        nueva_columna = jugador_con_pelota["columna"] + random.randint(-2, 2)
+
+        if posicion_valida(nueva_fila, filas) and posicion_valida(nueva_columna, columnas):
+
+            if cancha[nueva_fila][nueva_columna] == ".":
+                arbitro["fila"] = nueva_fila
+                arbitro["columna"] = nueva_columna
+                movido = True
+
+        intentos = intentos + 1
+
+    cancha = colocar_arbitro_y_sombra(cancha, arbitro, filas, columnas)
+
+    return cancha
 
 
 """
-BLOQUE 2
-IMPRIMIR LA CANCHA
+LIMPIA SOMBRA Y ARBITRO
 """
+def limpiar_arbitro_y_sombra(cancha):
+    for fila in range(len(cancha)):
+        for columna in range(len(cancha[fila])):
+            if cancha[fila][columna] == "R" or cancha[fila][columna] == "S":
+                cancha[fila][columna] = "."
 
-# funcion encargada de imprimir la matriz de la cancha
+    return cancha
+"""
+IMPRIME LA CANCHA
+INGRESA LA MATRIZ
+NO DEVUELVE VALOR
+"""
 def imprimir_matriz(cancha_imprimir):
-
-    # recorremos cada fila de la cancha
     for fila in cancha_imprimir:
-
-        # join une todos los elementos de la fila en un solo texto,
-        # separando cada posicion con un espacio
-        # de esta forma imprimimos una fila completa por cada print
         print(" ".join(fila))
+        
+        
+"""
+IMPRIME LOS JUGADORES
+RECIBE: EL DICCIONARIO DE JUGADORES
+"""
+def listar_jugadores(jugadores_lista):
+    print("\n========== LISTADO DE JUGADORES ==========")
+    print("Nro | Nombre | Equipo | Fila | Columna")
+    print("------------------------------------------")
 
+    for numero in jugadores_lista:
+        jugador = jugadores_lista[numero]
+
+        print(
+            str(numero) + " | " +
+            jugador["nombre"] + " | " +
+            jugador["equipo"] + " | " +
+            str(jugador["fila"]) + " | " +
+            str(jugador["columna"])
+            )
 
 """
-BLOQUE 3
-VALIDACIONES BASICAS
+CARGA LOS JUGADORES
 """
+def cargar_jugadores_predefinidos(cancha, jugadores):
 
-# funcion encargada de validar si una posicion esta dentro de los limites de la cancha
-def posicion_valida(fila, columna, filas_posibles, columnas_posibles):
+    # EQUIPO A - Argentina
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Dibu Martinez", "A", 20, 2, "arquero", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Molina", "A", 8, 12, "defensor", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Romero", "A", 17, 10, "defensor", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Otamendi", "A", 23, 10, "defensor", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Tagliafico", "A", 32, 12, "defensor", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "De Paul", "A", 10, 22, "mediocampista", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Enzo", "A", 20, 24, "mediocampista", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Mac Allister", "A", 30, 22, "mediocampista", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Di Maria", "A", 8, 35, "delantero", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Messi", "A", 20, 32, "delantero", "S")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Julian Alvarez", "A", 31, 35, "delantero", "N")
 
-    valida = True
+    # EQUIPO B - Brasil
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Alisson", "B", 20, 57, "arquero", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Danilo", "B", 8, 47, "defensor", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Marquinhos", "B", 17, 49, "defensor", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Thiago Silva", "B", 23, 49, "defensor", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Lodi", "B", 32, 47, "defensor", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Casemiro", "B", 10, 38, "mediocampista", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Paqueta", "B", 20, 36, "mediocampista", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Bruno Guimaraes", "B", 30, 38, "mediocampista", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Raphinha", "B", 8, 25, "delantero", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Neymar", "B", 20, 27, "delantero", "N")
+    jugadores, cancha = posicionar_jugador(cancha, jugadores, "Vinicius", "B", 31, 25, "delantero", "N")
 
-    # la fila debe estar entre 0 y 99
-    # la columna debe estar entre 0 y 59
-    if fila < 0 or fila >= filas_posibles or columna < 0 or columna >= columnas_posibles:
-        valida = False
-
-    return valida
-
-
-# funcion encargada de validar si el equipo ingresado es correcto
-def equipo_valido(equipo, valido):
-
-    valida = True
-
-    # los equipos validos son solamente "A" y "B"
-    if equipo not in valido:
-        valida = False
-
-    return valida
-
-
-# funcion encargada de validar si el rol ingresado es correcto
-def rol_valido(rol, rol_a_validar):
-
-    valida = True
-
-    # los roles validos son arquero, defensor, mediocampista y delantero
-    if rol not in rol_a_validar:
-        valida = False
-
-    return valida
-
-
-# funcion encargada de verificar si una celda de la cancha esta ocupada
-def celda_ocupada(cancha, fila, columna):
-
-    ocupada = False
-
-    # si la celda no contiene ".", significa que tiene un jugador o un obstaculo
-    if cancha[fila][columna] != ".":
-        ocupada = True
-
-    return ocupada
-
-
+    return jugadores, cancha
+        
 """
-BLOQUE 4
-CREACION Y GESTION DE JUGADORES
+BLOQUE
+MOVER JUGADOR
 """
-#probablemente se borre
-# funcion encargada de verificar si alguien ya tiene la pelota
-def hay_pelota_en_juego(jugadores_argentina, jugadores_brasil):
-
-    hay_pelota = False
-
-    # recorremos los jugadores de Argentina
-    for jugador in jugadores_argentina:
-        if jugador["tiene_pelota"] == True:
-            hay_pelota = True
-
-    # recorremos los jugadores de Brasil
-    for jugador in jugadores_brasil:
-        if jugador["tiene_pelota"] == True:
-            hay_pelota = True
-
-    return hay_pelota
-
-#probablemente se borre
-# funcion auxiliar para obtener todos los jugadores en una sola lista
-def obtener_todos_los_jugadores(jugadores_argentina, jugadores_brasil):
-
-    return jugadores_argentina + jugadores_brasil
-
-
+        
 """
-BLOQUE 5
-POSICIONAMIENTO DE JUGADORES
+CAMBIA LA POSICION DEL JUGADOR
+RECIBE: POSICION DEL JUGADOR Y A DONDE SE MUEVE
+DEVUELVE: LA NUEVA POSICION DEL JUGADOR
 """
-
-# funcion encargada de posicionar un jugador en la cancha
-def posicionar_jugador(cancha,jugadores_posicionar, nombre, equipo, fila, columna, rol, tiene_pelota, validar_equipo, validar_rol, fila_hasta, columna_hasta):
-
-    agregado = False
-
-    # validacion: equipo valido
-    if not equipo_valido(equipo, validar_equipo):
-        print("Error: el equipo " + equipo + " no es valido. Use A o B.")
-
-    # validacion: rol valido
-    elif not rol_valido(rol, validar_rol):
-        print("Error: el rol " + rol + " no es valido.")
-
-    # validacion: posicion dentro de la cancha
-    elif not posicion_valida(fila, columna, fila_hasta, columna_hasta):
-        print("Error: la posicion (" + str(fila) + ", " + str(columna) + ") esta fuera de la cancha.")
-
-    # validacion: celda ocupada
-    elif celda_ocupada(cancha, fila, columna):
-        print("Error: la celda (" + str(fila) + ", " + str(columna) + ") ya esta ocupada.")
-
-    # validacion: solo un jugador puede tener la pelota
-    elif tiene_pelota == True and obtener_jugador_con_pelota(jugadores_posicionar) != None:
-        print("Error: ya hay un jugador con la pelota en la cancha.")
-
-    else:
-
-        # creamos el diccionario del jugador
-        if len(jugadores_posicionar) == 0:
-            id_jugador = 1
-        else:
-            id_jugador = max(jugadores_posicionar) + 1
-
-        jugadores_posicionar[id_jugador] = crear_jugador(nombre, equipo, fila, columna, rol, tiene_pelota)
-        agregado = True
-        cancha [fila][columna] = equipo
-    return jugadores_posicionar
-
-
-"""
-BLOQUE 6
-OBSTACULOS
-"""
-
-# funcion encargada de agregar un obstaculo en la cancha
-def agregar_obstaculo(cancha, fila, columna, fila_hasta, columna_hasta):
-
-    agregado = False
-
-    # validamos que la posicion este dentro de la cancha
-    if not posicion_valida(fila, columna, fila_hasta, columna_hasta):
-        print("Error: la posicion del obstaculo esta fuera de la cancha.")
-
-    # validamos que la celda no este ocupada
-    elif celda_ocupada(cancha, fila, columna):
-        print("Error: no se puede agregar el obstaculo porque la celda esta ocupada.")
-
-    else:
-        cancha[fila][columna] = "X"
-        print("Obstaculo agregado correctamente en (" + str(fila) + ", " + str(columna) + ").")
-        agregado = True
-
-    return agregado
-
-
-"""
-BLOQUE 7
-MOVER JUGADOR - TAREA 3
-"""
-
-# funcion que calcula la nueva posicion segun la direccion
 def calcular_destino(fila, columna, direccion):
 
     nueva_fila = None
@@ -258,41 +229,35 @@ def calcular_destino(fila, columna, direccion):
 
     return nueva_fila, nueva_columna
 
-
-# funcion encargada de mover un jugador en la cancha
+"""
+MUEVE AL JUGADOR - ACTUALIZA LA POSICION
+RECIBE: MATRIZ, DICCIONARIO DE JUGADORES, HACIA DONDE SE MUEVE Y LIMITES DE LA CANCHA
+DEVUELVE: SI EL MOVIMIENTO FUE EXITOSO
+"""
 def mover_jugador(cancha, jugador, direccion, fila_hasta, columna_hasta):
 
     movimiento_exitoso = False
 
-    # calculamos la nueva posicion segun la direccion elegida
     nueva_fila, nueva_columna = calcular_destino(jugador["fila"], jugador["columna"], direccion)
 
-    # verificamos si la direccion ingresada existe
     if nueva_fila is None:
         print("Movimiento invalido: direccion '" + direccion + "' no reconocida.")
 
-    # verificamos que la nueva posicion este dentro de la cancha
-    elif not posicion_valida(nueva_fila, nueva_columna, fila_hasta, columna_hasta):
+    elif not posicion_valida(nueva_fila, fila_hasta) or not posicion_valida(nueva_columna, columna_hasta):
         print("Movimiento invalido: no se puede salir de la cancha.")
 
-    # verificamos que la nueva celda no este ocupada por jugador u obstaculo
     elif celda_ocupada(cancha, nueva_fila, nueva_columna):
         print("Movimiento invalido: la celda destino esta ocupada.")
 
     else:
-
-        # guardamos la posicion actual antes de mover
         fila_anterior = jugador["fila"]
         columna_anterior = jugador["columna"]
 
-        # limpiamos la posicion anterior en la matriz
         cancha[fila_anterior][columna_anterior] = "."
 
-        # actualizamos la posicion del jugador en su diccionario
         jugador["fila"] = nueva_fila
         jugador["columna"] = nueva_columna
 
-        # actualizamos la nueva posicion en la matriz con el equipo del jugador
         cancha[nueva_fila][nueva_columna] = jugador["equipo"]
 
         print("Movimiento exitoso: " + jugador["nombre"] + " se movio hacia " + direccion + ".")
@@ -301,45 +266,218 @@ def mover_jugador(cancha, jugador, direccion, fila_hasta, columna_hasta):
 
     return movimiento_exitoso
 
+"""
+VALIDACIONES BASICAS
+"""
+
+"""
+VALIDA POSICION
+RECIBE: VALOR DE LA POSICION Y EL NUMERO MAXIMO QUE PUEDE SER
+DEVUELVE: SI ES VALIDA O NO
+"""
+def posicion_valida(valor, numero_posible):
+
+    valida = True
+
+    # la fila debe estar entre 0 y 99
+    # la columna debe estar entre 0 y 59
+    if valor < 0 or valor >= numero_posible:
+        valida = False
+
+    return valida
 
 
 """
+VALIDA EQUIPO
+RECIBE: EL VALOR INGRESADO POR EL USUARIO Y EL VECTOR CON LOS EQUIPOS POSIBLES 
+DEVUELVE: SI ES VALIDA O NO
+"""
+def equipo_valido(equipo, valido):
+    valida = True
+    # los equipos validos son solamente "A" y "B"
+    if equipo not in valido:
+        valida = False
 
-BLOQUE 8
-
-DISTANCIA A LA PELOTA - TAREA 4
+    return valida
 
 """
+VALIDA ROL
+RECIBE: EL VALOR INGRESADO POR EL USUARIO Y EL VECTOR CON LOS ROLES POSIBLES 
+DEVUELVE: SI ES VALIDA O NO
+"""
+def rol_valido(rol, rol_a_validar):
 
-# funcion encargada de buscar y devolver el jugador que tiene la pelota
+    valida = True
 
+    # los roles validos son arquero, defensor, mediocampista y delantero
+    if rol not in rol_a_validar:
+        valida = False
+
+    return valida
+
+"""
+VALIDA EL MENSAJE AL PREGUNTAR SI POSEE PELOTA
+RECIBE: EL VALOR INGRESADO POR EL USUARIO 
+DEVUELVE: SI ES VALIDA O NO
+"""
+def pelota_validar(mensaje):
+    valida = True
+    if mensaje != "S" and mensaje != "N":
+        valida = False
+    return valida
+
+"""
+VALIDA SI LA CELDA SE ENCUENTRA OCUPADA
+RECIBE: LA MATRIZ, LA FILA Y LA COLUMNA 
+DEVUELVE: SI SE ENCUENTRA OCUPADA O NO
+"""
+def celda_ocupada(cancha, fila, columna):
+
+    ocupada = False
+
+    # si la celda no contiene ".", significa que tiene un jugador o un obstaculo
+    if cancha[fila][columna] != ".":
+        ocupada = True
+
+    return ocupada
+
+"""
+SOLICITA INGRESO DE POSICION
+RECIBE LA FILA O COLUMNA INGRESADA POR EL USUARIO
+DEVUELVE LA POSICION
+"""
+def pedir_posicion_valida(mensaje, limite, nombre_posicion):
+    posicion = pedir_entero(mensaje)
+
+    while not posicion_valida(posicion, limite):
+        print("Error: la " + nombre_posicion + " (" + str(posicion) + ") esta fuera de la cancha.")
+        posicion = pedir_entero(mensaje)
+
+    return posicion
+
+"""
+SOLICITA INGRESO DEL NOMBRE Y VERIFICA QUE NO ESTE VACIO
+RECIBE NADA
+DEVUELVE EL NOMBRE UNA VEZ QUE NO ESTA VACIO
+"""
+def pedir_nombre_jugador():
+    nombre = input("Ingresar Nombre del jugador (NO para cancelar): ").strip()
+
+    while nombre == "":
+        print("Error: el nombre no puede estar vacio.")
+        nombre = input("Ingresar Nombre del jugador (NO para cancelar): ").strip()
+
+    return nombre
+
+"""
+FUNCION PARA PEDIR UN NUMERO Y VALIDAR SI ES NUMERO
+RECIBE: MENSAJE DEL USUARIO
+IMPRIME ERROR 
+DEVUELVE: SI ES CORRECTO DEVUELVE EL NUMERO
+"""
+def pedir_entero(mensaje):
+    while True:
+        try:
+            numero = int(input(mensaje))
+            return numero
+        except ValueError:
+            print("Error: debe ingresar un numero entero.")
+            
+
+"""
+VALIDA LA DIRECCION INGRESADA
+RECIBE: LA DIRECCION INGRESADA POR EL USUARIO
+DEVUELVE: SI EL INGRESO ES UNA DIRECCION POSIBLE
+"""
+def direccion_valida(direccion):
+    direcciones_validas = ["arriba", "abajo", "izquierda", "derecha"]
+
+    if direccion in direcciones_validas:
+        return True
+    else:
+        return False
+
+"""
+VERIFICA SI EL JUGADOR ESTA EN LA MITAD OFENSIVA
+INGRESA: DICCIONARIO DE JUGADORES
+DEVUELVE: SI ESTA O NO EN CAPACIDAD DE IR CONTRA EL ARCO
+"""
+def esta_en_mitad_ofensiva(jugador):
+    if jugador["equipo"] == "A" and jugador["columna"] >= 30:
+        return True
+
+    elif jugador["equipo"] == "B" and jugador["columna"] <= 29:
+        return True
+
+    else:
+        return False
+    
+"""
+VERIFICA SI EL JUGADOR TIENE CAMINO AL ARCO LIBRE
+INGRESA: MATRIZ Y DICCIONARIO DE JUGADORES
+DEVUELVE SI TIENE O NO EL CAMINO LIBRE
+"""
+def camino_libre_al_arco(cancha, jugador):
+    if jugador["rol"] != "delantero":
+        return False
+
+    if not esta_en_mitad_ofensiva(jugador):
+        return False
+
+    fila = jugador["fila"]
+    columnas = len(cancha[0])
+
+    # Argentina ataca hacia la derecha, arco rival en columna 59
+    if jugador["equipo"] == "A":
+        columna = jugador["columna"] + 1
+
+        while columna < columnas:
+            if cancha[fila][columna] == "B" or cancha[fila][columna] == "X":
+                return False
+
+            columna = columna + 1
+
+        return True
+
+    # Brasil ataca hacia la izquierda, arco rival en columna 0
+    elif jugador["equipo"] == "B":
+        columna = jugador["columna"] - 1
+
+        while columna >= 0:
+            if cancha[fila][columna] == "A" or cancha[fila][columna] == "X":
+                return False
+
+            columna = columna - 1
+
+        return True
+
+    return False
+    
+"""
+BLOQUE
+ESTADISTICAS
+"""
+
+"""
+OBTIENE EL JUGADOR QUE POSEE LA PELOTA
+RECIBE: DICCIONARIO CON JUGADORES
+DEVUELVE: EL JUGADOR QUE POSEE LA PELOTA O NONE EN CASO DE QUE NO ESTE LA PELOTA
+"""
 def obtener_jugador_con_pelota(jugadores):
-
-    jugador_con_pelota = None
-
     for id_jugador in jugadores:
-
         jugador = jugadores[id_jugador]
 
-        if jugador["tiene_pelota"] == True:
-
-            jugador_con_pelota = jugador
-
-    return jugador_con_pelota
-
-# funcion encargada de calcular y mostrar la distancia Manhattan de cada jugador a la pelota
-
-def obtener_jugador_con_pelota(jugadores):
-    for id_jugador in jugadores:
-        jugador = jugadores[id_jugador]
-
-        if jugador["tiene_pelota"] == True:
+        if jugador["tiene_pelota"] == "S":
             return jugador
 
     return None
 
-
-def calcular_distancias_a_pelota(jugadores, equipo_buscado):
+"""
+CALCULA LA DISTANCIAS DE LOS JUGADORES CON LA PELOTA
+RECIBE: DICCIONARIO CON LOS JUGADORES, Y EL EQUIPO QUE TIENE LA PELOTA
+DEVUELVE: NADA
+"""
+def calcular_distancias_a_pelota(jugadores):
     jugador_con_pelota = obtener_jugador_con_pelota(jugadores)
 
     if jugador_con_pelota == None:
@@ -349,35 +487,30 @@ def calcular_distancias_a_pelota(jugadores, equipo_buscado):
         distancia_minima = None
         jugadores_mas_cercanos = []
 
-        print("\nDistancias a la pelota del equipo", equipo_buscado + ":")
+        print("\nDistancias a la pelota:")
 
         for id_jugador in jugadores:
             jugador = jugadores[id_jugador]
 
-            # Solo tomamos jugadores del equipo buscado
-            if jugador["equipo"] == equipo_buscado:
+            if jugador != jugador_con_pelota:
 
-                # Evitamos contar al mismo jugador que tiene la pelota
-                # porque su distancia seria 0 y siempre ganaria
-                if jugador["tiene_pelota"] == False:
+                distancia = abs(jugador["fila"] - jugador_con_pelota["fila"]) + abs(jugador["columna"] - jugador_con_pelota["columna"])
 
-                    distancia = abs(jugador["fila"] - jugador_con_pelota["fila"]) + abs(jugador["columna"] - jugador_con_pelota["columna"])
+                print(jugador["nombre"] + ": " + str(distancia))
 
-                    print(jugador["nombre"] + ": " + str(distancia))
+                if distancia_minima == None:
+                    distancia_minima = distancia
+                    jugadores_mas_cercanos = [jugador]
 
-                    if distancia_minima == None:
-                        distancia_minima = distancia
-                        jugadores_mas_cercanos = [jugador]
+                elif distancia < distancia_minima:
+                    distancia_minima = distancia
+                    jugadores_mas_cercanos = [jugador]
 
-                    elif distancia < distancia_minima:
-                        distancia_minima = distancia
-                        jugadores_mas_cercanos = [jugador]
-
-                    elif distancia == distancia_minima:
-                        jugadores_mas_cercanos.append(jugador)
+                elif distancia == distancia_minima:
+                    jugadores_mas_cercanos.append(jugador)
 
         if distancia_minima == None:
-            print("No hay jugadores del equipo", equipo_buscado, "para calcular distancia.")
+            print("No hay otros jugadores para calcular distancia.")
 
         else:
             print("\nJugador/es mas cercano/s a la pelota:")
@@ -386,228 +519,430 @@ def calcular_distancias_a_pelota(jugadores, equipo_buscado):
                 print(jugador["nombre"] + " con distancia " + str(distancia_minima))
 
 
-
-
-
 """
-
-BLOQUE 9
-
-PASES POSIBLES - TAREA 5
-
+BUSCA SI HAY PASES POSIBLES
+INGRESA: MATRIZ, Y LOS DOS POSIBLES PASES
+INCLUYE SI EL PASE ES INTERCEPTADO POR UN JUGADOR DEL EQUIPO CONTRARIO
+O BLOQUEADO POR UN OBSTACULO
+DEVUELVE: SI ES POSIBLE O NO
 """
-
-# funcion encargada de verificar si existe un pase posible entre dos jugadores
-
 def pase_posible(cancha, jugador_origen, jugador_destino):
 
     posible = True
-
     # validamos que los jugadores pertenezcan al mismo equipo
-
     if jugador_origen["equipo"] != jugador_destino["equipo"]:
-
         posible = False
-
     # validamos que el pase sea en linea recta
-
     # esto significa que deben estar en la misma fila o en la misma columna
-
     elif jugador_origen["fila"] != jugador_destino["fila"] and jugador_origen["columna"] != jugador_destino["columna"]:
-
         posible = False
-
     else:
-
-        # si estan en la misma fila, analizamos las columnas que hay entre ambos jugadores
-
         if jugador_origen["fila"] == jugador_destino["fila"]:
-
             fila = jugador_origen["fila"]
-
-            # determinamos desde que columna hasta que columna hay que revisar
-
             if jugador_origen["columna"] < jugador_destino["columna"]:
-
                 inicio = jugador_origen["columna"] + 1
-
                 fin = jugador_destino["columna"]
-
             else:
-
                 inicio = jugador_destino["columna"] + 1
-
                 fin = jugador_origen["columna"]
-
-            # recorremos las celdas intermedias entre los dos jugadores
-
             columna = inicio
-
             while columna < fin and posible == True:
-
-                # un obstaculo bloquea el pase
-
                 if cancha[fila][columna] == "X":
-
                     posible = False
-
-                # un rival bloquea el pase
-
                 elif cancha[fila][columna] != "." and cancha[fila][columna] != jugador_origen["equipo"]:
-
                     posible = False
-
                 columna = columna + 1
-
-        # si estan en la misma columna, analizamos las filas que hay entre ambos jugadores
-
         elif jugador_origen["columna"] == jugador_destino["columna"]:
-
             columna = jugador_origen["columna"]
-
-            # determinamos desde que fila hasta que fila hay que revisar
-
             if jugador_origen["fila"] < jugador_destino["fila"]:
-
                 inicio = jugador_origen["fila"] + 1
-
                 fin = jugador_destino["fila"]
-
             else:
-
                 inicio = jugador_destino["fila"] + 1
-
                 fin = jugador_origen["fila"]
-
-            # recorremos las celdas intermedias entre los dos jugadores
-
             fila = inicio
-
             while fila < fin and posible == True:
-
-                # un obstaculo bloquea el pase
-
                 if cancha[fila][columna] == "X":
-
                     posible = False
-
-                # un rival bloquea el pase
-
                 elif cancha[fila][columna] != "." and cancha[fila][columna] != jugador_origen["equipo"]:
-
                     posible = False
-
                 fila = fila + 1
-
     return posible
 
-# funcion encargada de listar todos los pases posibles para el jugador que tiene la pelota
-
+"""
+ANALIZA SI HAY PASES POSIBLES
+INGRESA: MATRIZ, DICCIONARIO DE JUGADORES
+DEVUELVE: NADA
+"""
 def listar_pases_posibles(cancha, jugadores):
-
-    # buscamos al jugador que tiene la pelota
     jugador_con_pelota = obtener_jugador_con_pelota(jugadores)
-
     if jugador_con_pelota == None:
-
         print("Error: no hay ningun jugador con la pelota.")
-
     else:
-
         hay_pases = False
-
         print("\nPases posibles para " + jugador_con_pelota["nombre"] + ":")
-
-        # recorremos el diccionario de jugadores
         for id_jugador in jugadores:
-
             jugador = jugadores[id_jugador]
-
-            # no tiene sentido analizar pase hacia si mismo
             if jugador != jugador_con_pelota:
-
-                # solo analizamos compañeros del mismo equipo
                 if jugador["equipo"] == jugador_con_pelota["equipo"]:
-
                     if pase_posible(cancha, jugador_con_pelota, jugador):
-
                         print("- Pase posible a " + jugador["nombre"])
-
                         hay_pases = True
-
+                    else:
+                        print("- Pase bloqueado hacia " + jugador["nombre"])
         if hay_pases == False:
-
             print("No hay pases posibles disponibles.")
+            
+
+"""
+BUSCA SI EL JUGADOR TIENE CAMINO LIBRE AL ARCO
+INGRESA: MATRIZ Y DICCIONARIO DE JUGADORES
+DEVUELVE: NADA
+"""
+def detectar_caminos_libres_al_arco(cancha, jugadores):
+    hay_delanteros = False
+
+    print("\nCamino libre al arco:")
+
+    for id_jugador in jugadores:
+        jugador = jugadores[id_jugador]
+
+        if jugador["rol"] == "delantero":
+            hay_delanteros = True
+
+            if camino_libre_al_arco(cancha, jugador):
+                print("- " + jugador["nombre"] + " tiene camino libre al arco.")
+            else:
+                print("- " + jugador["nombre"] + " no tiene camino libre al arco.")
+
+    if hay_delanteros == False:
+        print("No hay delanteros cargados para analizar camino libre al arco.")
 
 
 """
-
-BLOQUE 10
-
-PROGRAMA PRINCIPAL DE PRUEBA
-
+BLOQUE OPCIONES
 """
 
-def main():
+"""
+OPCION CREAR JUGADORES
+RECIBE: EL DICCIONARIO DE JUGADORES, EQUIPOS VALIDOS, LOS LIMITES DE LA CANCHA, LOS ROLES VALIDOS Y LA MATRIZ
+DEVUELVE: EL DICCIONARIO DE JUGADORES Y LA MATRIZ
+"""
+def opcion_crear_jugador(anexo_jugadores, equipos, filas_validas, columnas_validas, roles, cancha_jugador):
+
+    temp_nombre = pedir_nombre_jugador()
+
+    while temp_nombre != "NO":
+
+        temp_equipo = input("Ingresar el equipo del jugador: ").upper()
+
+        while not equipo_valido(temp_equipo, equipos):
+            print("Error: el equipo " + temp_equipo + " no es valido. Use A o B.")
+            temp_equipo = input("Ingresar el equipo del jugador: ").upper()
+
+        celda = True
+
+        while celda == True:
+
+            temp_fila = pedir_posicion_valida(
+                "Ingresar la fila donde se ubica el jugador: ",
+                filas_validas,
+                "fila"
+            )
+
+            temp_columna = pedir_posicion_valida(
+                "Ingresar la columna donde se ubica el jugador: ",
+                columnas_validas,
+                "columna"
+            )
+
+            celda = celda_ocupada(cancha_jugador, temp_fila, temp_columna)
+
+            if celda == True:
+                print("Error: la celda ya esta ocupada. Ingrese otra posicion.")
+
+        temp_rol = input("Ingresar el rol jugador: ")
+
+        while not rol_valido(temp_rol, roles):
+            print("Error: el rol " + temp_rol + " no es valido.")
+            temp_rol = input("Ingresar el rol jugador: ")
+
+        if obtener_jugador_con_pelota(anexo_jugadores) != None:
+            temp_pelota = "N"
+            print("El jugador no tiene pelota porque ya hay una en juego")
+        else:
+            temp_pelota = input("El jugador tiene la pelota? (S/N): ").upper()
+
+            while not pelota_validar(temp_pelota):
+                print("Error: el valor no es valido.")
+                temp_pelota = input("El jugador tiene la pelota? (S/N): ").upper()
+
+        anexo_jugadores, cancha_jugador = posicionar_jugador(cancha_jugador, anexo_jugadores, temp_nombre, temp_equipo, temp_fila, temp_columna, temp_rol, temp_pelota)
+        print("Jugador agregado correctamente: " + temp_nombre)
+        temp_nombre = pedir_nombre_jugador()
+
+    return anexo_jugadores, cancha_jugador
+
+"""
+OPCION OBSTACULOS
+RECIBE: LOS LIMITES DE LA CANCHA Y LA MATRIZ
+DEVUELVE: LA MATRIZ
+"""
+def opcion_crear_obstaculo(filas_validas, columnas_validas, obstaculo_cancha):
+
+    obstaculo_fila = pedir_entero("Agregar fila del obstaculo (-1 para cancelar): ")
+
+    while obstaculo_fila != -1:
+
+        while not posicion_valida(obstaculo_fila, filas_validas):
+            print("Error: la fila (" + str(obstaculo_fila) + ") esta fuera de la cancha.")
+            obstaculo_fila = pedir_entero("Agregar fila del obstaculo (-1 para cancelar): ")
+
+            if obstaculo_fila == -1:
+                return obstaculo_cancha
+
+        obstaculo_columna = pedir_entero("Ingresar la columna donde se ubica el obstaculo: ")
+
+        while not posicion_valida(obstaculo_columna, columnas_validas):
+            print("Error: la columna (" + str(obstaculo_columna) + ") esta fuera de la cancha.")
+            obstaculo_columna = pedir_entero("Ingresar la columna donde se ubica el obstaculo: ")
+
+        if celda_ocupada(obstaculo_cancha, obstaculo_fila, obstaculo_columna):
+            print("Error: la celda ya esta ocupada.")
+        else:
+            obstaculo_cancha = agregar_obstaculo(obstaculo_cancha, obstaculo_fila, obstaculo_columna)
+
+        obstaculo_fila = pedir_entero("Agregar fila del obstaculo (-1 para cancelar): ")
+
+    return obstaculo_cancha
+
+"""
+OPCION MOVER JUGADOR
+RECIBE: MATRIZ, DICCIONARIO DE JUGADORES, LIMITES DE LA CANCHA
+DEVUELVE: MATRIZ Y EL DICCIONARIO DE JUGADORES
+"""
+def opcion_mover_jugador(cancha, jugadores, filas_validas, columnas_validas):
+    listar_jugadores(jugadores)
+
+    jugador_seleccion = pedir_entero("Elegir el Nro del jugador a mover (0 para cancelar): ")
+
+    while jugador_seleccion != 0 and jugador_seleccion not in jugadores:
+        print("Error: no existe un jugador con ese numero.")
+        jugador_seleccion = pedir_entero("Elegir el Nro del jugador a mover (0 para cancelar): ")
+
+    if jugador_seleccion == 0:
+        print("Movimiento cancelado.")
+        return cancha, jugadores
+
+    movimiento_exitoso = False
+
+    while movimiento_exitoso == False:
+        direccion = input("Elegir hacia donde mover el jugador (arriba/abajo/izquierda/derecha/NO para cancelar): ").strip().lower()
+
+        if direccion == "no":
+            print("Movimiento cancelado.")
+            return cancha, jugadores
+
+        while not direccion_valida(direccion):
+            print("Error: direccion invalida.")
+            direccion = input("Elegir hacia donde mover el jugador (arriba/abajo/izquierda/derecha/NO para cancelar): ").strip().lower()
+
+            if direccion == "no":
+                print("Movimiento cancelado.")
+                return cancha, jugadores
+
+        movimiento_exitoso = mover_jugador(cancha, jugadores[jugador_seleccion], direccion, filas_validas, columnas_validas)
+
+        if movimiento_exitoso == False:
+            print("El movimiento no se pudo realizar. Intente con otra direccion.")
+
+    return cancha, jugadores
+
+"""
+OPCION ESTADISTICAS
+SOLO EN CASO DE SER DOS O MAS JUGADORES
+INGRESA: LA MATRIZ Y EL DICCIONARIO CON JUGADORES
+"""
+def opcion_analizar_jugada(cancha, jugadores):
+
+    if len(jugadores) == 0:
+        print("No hay jugadores cargados para analizar.")
+    else:
+        jugador_con_pelota = obtener_jugador_con_pelota(jugadores)
+
+        print("\n========== ANALISIS DE JUGADA ==========")
+
+        if jugador_con_pelota == None:
+            print("No hay ningun jugador con la pelota.")
+            print("No se pueden analizar pases ni distancias a la pelota.")
+        else:
+            print("Jugador con pelota: " + jugador_con_pelota["nombre"])
+            print("Equipo con pelota: " + jugador_con_pelota["equipo"])
+
+            if len(jugadores) < 2:
+                print("Debe haber al menos dos jugadores cargados para analizar pases y distancias.")
+            else:
+                listar_pases_posibles(cancha, jugadores)
+                calcular_distancias_a_pelota(jugadores)
+
+        detectar_caminos_libres_al_arco(cancha, jugadores)
+
+"""
+BLOQUE
+MENU
+"""
+
+"""
+FUNCION QUE SIMULA BORRAR UNA PANTALLA
+"""
+def borrar_pantalla():
+
+    print("\n" * 50)
+
+"""
+SUBMENU
+"""
+def submenu():
     # declaramos las constantes de filas y columnas de la cancha
-    filas = 100
+    filas = 40
     columnas = 60
-
     # roles y equipos validos segun la consigna
     roles_validos = ["arquero", "defensor", "mediocampista", "delantero"]
     equipos_validos = ["A", "B"]
-
     jugadores = {}
-    # creamos la matriz de la cancha
+    submenu_seleccion = -1
 
     matriz_cancha = crear_cancha(filas, columnas)
 
-    print("Cancha creada correctamente.")
+    jugadores, matriz_cancha = cargar_jugadores_predefinidos(matriz_cancha, jugadores)
 
-    # posicionamos jugadores de prueba
-
-    jugadores = posicionar_jugador(matriz_cancha, jugadores, "Otamendi", "A", 50, 10, "defensor", True, equipos_validos, roles_validos, filas, columnas)
-    jugadores = posicionar_jugador(matriz_cancha, jugadores, "Messi", "A", 50, 20, "defensor", False, equipos_validos, roles_validos, filas, columnas)
-
-    # agregamos un obstaculo para probar movimientos invalidos
-
-    agregar_obstaculo(matriz_cancha, 49, 10, filas, columnas)
-
-    # verificamos algunas celdas puntuales
-
-    print("Celda Otamendi:", matriz_cancha[50][10])
-
-    print("Celda Messi:", matriz_cancha[50][20])
-
-    print("Celda Neymar:", matriz_cancha[50][30])
-
-    print("Celda obstaculo:", matriz_cancha[49][10])
-
-    # probamos movimiento hacia obstaculo
-
-    mover_jugador(matriz_cancha, jugadores[1], "arriba", filas, columnas)
-
-    # probamos movimiento valido
-
-    mover_jugador(matriz_cancha, jugadores[1], "derecha", filas, columnas)
-
-    print("Nueva posicion de Otamendi:", jugadores[1])
-
-    # calculamos las distancias de todos los jugadores a la pelota
-
-    calcular_distancias_a_pelota(jugadores, "A")
-    calcular_distancias_a_pelota(jugadores, "B")
-
-    # listamos los pases posibles para el jugador que tiene la pelota
-
-    listar_pases_posibles(matriz_cancha, jugadores)
-
-    # si quieren ver la cancha completa, descomentar esta linea
-
+    arbitro = crear_arbitro(20, 30)
+    matriz_cancha = colocar_arbitro_y_sombra(matriz_cancha, arbitro, filas, columnas)
     imprimir_matriz(matriz_cancha)
+    while submenu_seleccion != 0:
 
-# este bloque indica el punto de inicio del programa
+        # mostramos las opciones disponibles para el usuario
 
+        print("\n========== MENU PRINCIPAL ==========")
+        print("1 - Agregar jugador")
+        print("2 - Agregar obstaculo")
+        print("3 - Mover jugador")
+        print("4 - Mostrar estadísticas")
+        print("0 - Volver")
+
+        try:
+            submenu_seleccion = int(input("\nIngrese una opcion: "))
+        
+        except ValueError:
+            borrar_pantalla()
+            print("La opcion ingresada no es valida. Debe ingresar un numero de las opciones del menu.")
+            continue
+        #1 - AGREGAR JUGADOR
+        if submenu_seleccion == 1:
+            jugadores, matriz_cancha = opcion_crear_jugador(jugadores, equipos_validos, filas, columnas, roles_validos, matriz_cancha)
+            matriz_cancha = mover_arbitro_cerca_jugada(matriz_cancha, jugadores, arbitro, filas, columnas)
+            borrar_pantalla()
+            imprimir_matriz(matriz_cancha)
+        #2 - AGREGAR OBSTACULO
+        elif submenu_seleccion == 2:
+            matriz_cancha=opcion_crear_obstaculo(filas, columnas, matriz_cancha)
+            borrar_pantalla()
+            imprimir_matriz(matriz_cancha)
+        #3 - MOVER UN JUGADOR
+        elif submenu_seleccion == 3:
+            if len(jugadores) == 0:
+                print("Primero debe cargar un jugador.")
+            else:
+                matriz_cancha, jugadores = opcion_mover_jugador(matriz_cancha, jugadores, filas, columnas)
+                matriz_cancha = mover_arbitro_cerca_jugada(matriz_cancha, jugadores, arbitro, filas, columnas)
+                borrar_pantalla()
+                imprimir_matriz(matriz_cancha)
+        #4 - ESTADISTICAS
+        elif submenu_seleccion == 4:
+            borrar_pantalla()
+            opcion_analizar_jugada(matriz_cancha, jugadores)
+        else:
+            borrar_pantalla()
+            print("La opcion ingresada no existe. Por favor, ingresar una opcion valida.")    
+"""
+MENU PRINCIPAL
+"""
+def main():
+    menu_seleccion = -1
+    while menu_seleccion != 0:
+
+        print("\n========== MENU PRINCIPAL ==========")
+        print("1 - Modo de uso")
+        print("2 - Ejecutar Jugada")
+        print("3 - Acerca de")
+        print("0 - Salir")
+
+        try:
+            menu_seleccion = int(input("\nIngrese una opcion: "))      
+        except ValueError:
+            borrar_pantalla()
+            print("La opcion ingresada no es valida. Debe ingresar un numero de las opciones del menu.")
+            continue
+        
+        #1 - MODO DE USO
+        if menu_seleccion == 1:
+            borrar_pantalla()
+            print("\n========== MODO DE USO ==========\n")
+
+            print("1. Seleccionar la opción 2 del menú")
+            print("2. Ingresar los jugadores y los obstaculos, junto con su posición")
+            print("3. Los únicos equipos que pueden cargarse son: A (Argentina) y B (Brasil)")
+            print("4. Los roles permitidos son: arquero, defensor, mediocampista o delantero")
+            print("5. Tener en cuenta que la cancha es de 40 filas x 60 columnas")
+            print("6. En el caso necesario es posible mover un jugador")
+            print("4. Ejecutar la opción 4, para mostrar estadísticas")
+            
+        #2 - SUBMENU
+        elif menu_seleccion == 2:
+            borrar_pantalla()
+            submenu()
+            borrar_pantalla()
+        #3 - ACERCA DE
+        elif menu_seleccion == 3:
+
+            borrar_pantalla()
+
+            print("\n========== ACERCA DE ==========\n")
+
+            print("Proyecto realizado para la Copa de Algoritmia y Programacion UADE 2026.\n")
+
+            print("Integrantes del equipo:")
+            print("- Lucas Abad")
+            print("- Thiago Albornoz")
+            print("- Valentino Sarniguette")
+            print("- Gaston Trezeguet")
+            print("- Valentin Zaccari")
+
+            
+
+            print("""        ___________
+       '._==_==_=_.'
+       .-\\:      /-.
+      |   \\     /   |
+       \\   \\   /   /
+        '.  \\ /  .'
+          '-._.-'
+            | |
+           _| |_
+          '-----'""")
+    
+        elif menu_seleccion == 0:
+            borrar_pantalla()
+            print("Saliendo del programa...")
+        else:
+            borrar_pantalla()
+            print("La opcion ingresada no existe. Por favor, ingresar una opcion valida.")
+    
+
+"""
+BLOQUE
+INICIO
+"""
 if __name__ == "__main__":
 
     main()

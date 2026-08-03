@@ -4,8 +4,13 @@
   <img src="assets/logo.jpeg" alt="Codigo Alpha Logo" width="250"/>
 </p>
 
-## Sobre nosotros
-Somos **Codigo Alpha**, un equipo que participa en la **Copa de Algoritmia y Programación UADE 2026**.  
+## Sobre nosotros 🥇
+Somos **Codigo Alpha**, un equipo que participó en la **Copa de Algoritmia y Programación UADE 2026**. 
+Obtuvimos el primer puesto, resultando como unicos ganadores de la competencia.
+<p align="center">
+  <img src="assets/final_premio.jpeg" alt="Codigo Alpha Logo" width=""/>
+</p>
+
 Armamos este repo para organizarnos mientras resolvemos los desafíos.
 
 ## Integrantes

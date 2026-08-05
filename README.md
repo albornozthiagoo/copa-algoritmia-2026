@@ -1,7 +1,7 @@
 # Codigo Alpha
 
 <p align="center">
-  <img src="assets/logo.jpeg" alt="Codigo Alpha Logo" width="250"/>
+  <img src="assets/logo.png" alt="Codigo Alpha Logo" width="250"/>
 </p>
 
 ## Sobre nosotros 🥇
